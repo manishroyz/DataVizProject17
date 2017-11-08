@@ -86,6 +86,7 @@ class TimeChart {
                 return;
             });
 
+        
         //add brush info here!!
     };
 
