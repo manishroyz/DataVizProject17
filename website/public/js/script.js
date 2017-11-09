@@ -1,8 +1,5 @@
-
-        let timeChart = new TimeChart();
-
         let selectionChart = new SelectionChart();
-
+        let timeChart = new TimeChart(selectionChart);
         let circleChart = new CircleChart(selectionChart);
 
 

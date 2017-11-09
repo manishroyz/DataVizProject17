@@ -14,7 +14,7 @@ class SelectionChart {
      * @param selectedTime data corresponding to the states selected on brush
      */
     update(selectedTime){
-
+        console.log(selectedTime);
 
         //Update the visualization on brush events over the Circle chart
 
