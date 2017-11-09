@@ -12,6 +12,8 @@
         });
         */
 
+        //COMMENTED FOR REFERENCE
+        /*
         d3.csv("data/201601-citibike-tripdata.csv", function (error, bikeData) {
 
             let parser = d3.timeParse("%m/%d/%Y %H:%M:%S");
@@ -99,4 +101,5 @@
                 }
             });
             return flag;
-        }
+        };
+        */
