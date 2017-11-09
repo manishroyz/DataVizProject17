@@ -50,7 +50,7 @@ class TimeChart {
             'text':"12PM",
             'value':12
         });
-        for(let i = 13; i<23; ++i){
+        for(let i = 13; i<=23; ++i){
             hours.push({
                 'text': i + "PM",
                 'value':i
