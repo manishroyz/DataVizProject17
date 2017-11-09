@@ -1,5 +1,5 @@
 
-class mapChart {
+class MapChart {
 
     /**
      * Constructor for the Map Chart

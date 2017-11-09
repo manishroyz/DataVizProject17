@@ -1,5 +1,5 @@
 /** Class implementing the circleChart. */
-class circleChart {
+class CircleChart {
 
     /**
      * Initializes the svg elements required to lay the tiles
