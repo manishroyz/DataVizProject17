@@ -12,6 +12,18 @@ h1 {
     padding: 0px;
     margin-left: 20px;
 }
+
+.timeBar{
+    stroke: #eee;
+    fill: #33cccc;
+}
+
+.timeBarText{
+    font-size: 22px;
+    text-anchor: middle;
+    fill: #336699;
+}
+
 .info{
     margin-left: 20px;
 }
@@ -40,6 +52,9 @@ h1 {
 .electoralVoteText, .votesPercentageText{
     font-size: 35px;
 }
+
+
+
 .end{
     text-anchor:end;
 }
@@ -93,10 +108,6 @@ h1 {
     fill: #45AD6A;
     color: #45AD6A;
     text-anchor:start;
-}
-
-.votesPercentage{
-    stroke: #eee;
 }
 
 .highlighted{

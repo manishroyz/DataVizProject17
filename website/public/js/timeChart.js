@@ -6,6 +6,7 @@ class TimeChart {
      */
     constructor(selectionChart){
         this.selectionChart = selectionChart;
+        let that = this;
 
         this.margin = {top: 30, right: 20, bottom: 30, left: 50};
         let divTimeChart = d3.select("#time-chart").classed("content", true);
@@ -13,7 +14,7 @@ class TimeChart {
         //fetch the svg bounds
         this.svgBounds = divTimeChart.node().getBoundingClientRect();
         this.svgWidth = this.svgBounds.width - this.margin.left - this.margin.right;
-        this.svgHeight = 200;
+        this.svgHeight = 30;
 
         //add the svg to the div
         this.monthsvg = divTimeChart.append("svg")
@@ -29,15 +30,15 @@ class TimeChart {
             .attr("height",this.svgHeight);
 
         let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        let dates = [];
+        let days = [];
         let hours = [
             {
-                'text':"MIDNIGHT",
+                'text':"12AM",
                 'value':0
             }
         ];
         for(let i =1; i<=31; ++i){
-            dates.push(i);
+            days.push(i);
         }
         for(let i = 1; i<=11; ++i){
             hours.push({
@@ -46,7 +47,7 @@ class TimeChart {
             });
         }
         hours.push({
-            'text':"NOON",
+            'text':"12PM",
             'value':12
         });
         for(let i = 1; i<=11; ++i){
@@ -56,9 +57,13 @@ class TimeChart {
             });
         }
         hours.push({
-            'text':"MIDNIGHT",
+            'text':"12AM",
             'value':0
         });
+
+        this.selectedMonths = months;
+        this.selectedDays = days;
+        this.selectedHours = hours;
 
         let monthsum = 12;
         let daysum = 31;
@@ -77,32 +82,123 @@ class TimeChart {
         let monthrects = this.monthsvg.selectAll("rect").data(months);
         monthrects = monthrects.enter().append("rect").merge(monthrects);
         monthrects.exit().remove();
-        monthrects.attr("height", 20)
+        monthrects.attr("height", this.svgHeight)
             .attr("width", this.svgWidth/monthsum)
             .attr("x", function(d,i){
                 return monthscale(i);
             })
-            .attr("y",0);
+            .attr("y",0)
+            .classed("timeBar", true);
 
         let dayrects = this.daysvg.selectAll("rect").data(days);
         dayrects = dayrects.enter().append("rect").merge(dayrects);
         dayrects.exit().remove();
-        dayrects.attr("height", 20)
+        dayrects.attr("height", this.svgHeight)
             .attr("width", this.svgWidth/daysum)
             .attr("x", function(d,i){
                 return dayscale(i);
             })
-            .attr("y",0);
+            .attr("y",0)
+            .classed("timeBar", true);
 
         let hourrects = this.hoursvg.selectAll("rect").data(hours);
         hourrects = hourrects.enter().append("rect").merge(hourrects);
         hourrects.exit().remove();
-        hourrects.attr("height", 20)
+        hourrects.attr("height", this.svgHeight)
             .attr("width", this.svgWidth/hoursum)
             .attr("x", function(d,i){
                 return hourscale(i);
             })
-            .attr("y",0);
+            .attr("y",0)
+            .classed("timeBar", true);
+
+        let monthtexts = this.monthsvg.selectAll("text").data(months);
+        monthtexts = monthtexts.enter().append("text").merge(monthtexts);
+        monthtexts.exit().remove();
+        monthtexts.text(d=>d)
+            .attr("x", function(d,i){
+                return monthscale(i+0.5);
+            })
+            .attr("y",this.svgHeight-5)
+            .classed("timeBarText", true);
+
+        let daytexts = this.daysvg.selectAll("text").data(days);
+        daytexts = daytexts.enter().append("text").merge(daytexts);
+        daytexts.exit().remove();
+        daytexts.text(d=>d)
+            .attr("x", function(d,i){
+                return dayscale(i+0.5);
+            })
+            .attr("y",this.svgHeight-5)
+            .classed("timeBarText", true);
+
+        let hourtexts = this.hoursvg.selectAll("text").data(hours);
+        hourtexts = hourtexts.enter().append("text").merge(hourtexts);
+        hourtexts.exit().remove();
+        hourtexts.text(d=>d.text)
+            .attr("x", function(d,i){
+                return hourscale(i+0.5);
+            })
+            .attr("y",this.svgHeight-5)
+            .classed("timeBarText", true);
+
+        this.selection = {
+            'selectedMonths': this.selectedMonths,
+            'selectedDays' : this.selectedDays,
+            'selectedHours' : this.selectedHours
+        };
+
+        //add brush info here!
+        var monthbrush = d3.brushX().extent([[0,0],[monthscale(monthsum),this.svgHeight]]).on("end", function(){
+            // console.log(d3.event.selection);
+            let selection = months.filter((d,i)=>{
+                // console.log(d['x']);
+                if(d3.event.selection==null)
+                    return false;
+                if(monthscale(i)>=d3.event.selection[0] && monthscale(i+1)<=d3.event.selection[1])
+                    return true;
+                return false;
+            });
+            // console.log(selection.data().map(d=>d['__data__']));
+            that.selection.selectedMonths = selection;
+            that.selectionChart.update(that.selection);
+        });
+        this.monthsvg.append("g").attr("class", "brush").call(monthbrush);
+
+        var daybrush = d3.brushX().extent([[0,0],[dayscale(daysum),this.svgHeight]]).on("end", function(){
+            // console.log(d3.event.selection);
+            let selection = days.filter((d,i)=>{
+                // console.log(d['x']);
+                if(d3.event.selection==null)
+                    return false;
+                if(dayscale(i)>=d3.event.selection[0] && dayscale(i+1)<=d3.event.selection[1])
+                    return true;
+                return false;
+            });
+            // console.log(selection.data().map(d=>d['__data__']));
+            that.selection.selectedDays = selection;
+            that.selectionChart.update(that.selection);
+        });
+        this.daysvg.append("g").attr("class", "brush").call(daybrush);
+
+        var hourbrush = d3.brushX().extent([[0,0],[hourscale(hoursum),this.svgHeight]]).on("end", function(){
+            // console.log(d3.event.selection);
+            let selection = days.filter((d,i)=>{
+                // console.log(d['x']);
+                if(d3.event.selection==null)
+                    return false;
+                if(dayscale(i)>=d3.event.selection[0] && dayscale(i+1)<=d3.event.selection[1])
+                    return true;
+                return false;
+            });
+            // console.log(selection.data().map(d=>d['__data__']));
+            that.selection.selectedHours = selection;
+            that.selectionChart.update(that.selection);
+        });
+
+        this.hoursvg.append("g").attr("class", "brush").call(hourbrush);
+
+
 
     }
 
@@ -130,148 +226,6 @@ class TimeChart {
      */
     update (cityBikeData, colorScale){
 
-        let that = this;
-        //for reference:https://github.com/Caged/d3-tip
-        //Use this tool tip element to handle any hover over the chart
-        let tip = d3.tip().attr('class', 'd3-tip')
-            .direction('s')
-            .offset(function() {
-                return [0,0];
-            })
-            .html(function(d) {
-                // /* populate data in the following formatx`
-                // let tooltip_data = {
-                //     "result":[
-                //         {
-                //             "nominee": electionResult[0]['D_Nominee_prop'],
-                //             "votecount": electionResult[0]['D_Votes_Total'],
-                //             "percentage": electionResult[0]['D_PopularPercentage'],
-                //             "party":"D"
-                //         } ,
-                //         {
-                //             "nominee": electionResult[0]['R_Nominee_prop'],
-                //             "votecount": electionResult[0]['R_Votes_Total'],
-                //             "percentage": electionResult[0]['R_PopularPercentage'],
-                //             "party":"R"
-                //         } ,
-                //         {
-                //             "nominee": electionResult[0]['I_Nominee_prop'],
-                //             "votecount": electionResult[0]['I_Votes_Total'],
-                //             "percentage": electionResult[0]['I_PopularPercentage'],
-                //             "party":"I"
-                //         }
-                //     ]
-                // };
-
-                //  * pass this as an argument to the tooltip_render function then,
-                //  * return the HTML content returned from that method.
-                //  * */
-                // return that.tooltip_render(tooltip_data);
-                return;
-            });
-
-
-        // let rects = this.svg.selectAll("rect").data(data_for_bars);
-        // rects.exit().remove();
-        // rects = rects.enter().append("rect").merge(rects);
-
-
-        if(electionResult[0]['I_PopularPercentage'].length>0)
-            this.svg.append("rect").attr("x", xscale(0))
-                .attr("y", 80)
-                .attr("width", xscale(x1))
-                .attr("height", 30)
-                .classed('independent', true)
-                .classed('votePercentage', true)
-                .data(electionResult);
-
-        this.svg.append("rect").attr("x", xscale(x1))
-            .attr("y", 80)
-            .attr("width", xscale(+electionResult[0]['D_PopularPercentage'].substring(0, electionResult[0]['D_PopularPercentage'].length-1)))
-            .attr("height", 30)
-            .classed('democrat', true)
-            .classed('votePercentage', true)
-            .data(electionResult);
-
-        this.svg.append("rect").attr("x",
-            xscale(x1
-                + +electionResult[0]['D_PopularPercentage'].substring(0, electionResult[0]['D_PopularPercentage'].length-1)))
-            .attr("y", 80)
-            .attr("width", xscale(electionResult[0]['R_PopularPercentage'].substring(0, electionResult[0]['R_PopularPercentage'].length-1)))
-            .attr("height", 30)
-            .classed('republican', true)
-            .classed('votePercentage', true)
-            .data(electionResult);
-
-        //Display the total percentage of votes won by each party
-        //on top of the corresponding groups of bars.
-        //HINT: Use the .votesPercentageText class to style your text elements;  Use this in combination with
-        // chooseClass to get a color based on the party wherever necessary
-
-        this.svg.selectAll("text").remove();
-        if(electionResult[0]['I_PopularPercentage'].length>0)
-            this.svg.append("text").attr('x', xscale(0))
-                .attr('y', 70)
-                .classed('votesPercentageText', true)
-                .classed('independent', true)
-                .text(electionResult[0]['I_PopularPercentage']);
-
-        if(electionResult[0]['I_PopularPercentage'].length>0)
-            this.svg.append("text").attr('x', xscale(0))
-                .attr('y', 40)
-                .classed('votesPercentageText', true)
-                .classed('independent', true)
-                .text(electionResult[0]['I_Nominee_prop']);
-
-        this.svg.append("text").attr('x', xscale(sum/2-sum/4))
-            .attr('y', 70)
-            .classed('votesPercentageText', true)
-            .classed('democrat', true)
-            .text(electionResult[0]['D_PopularPercentage']);
-
-        this.svg.append("text").attr('x', xscale(sum/2-sum/4))
-            .attr('y', 40)
-            .classed('votesPercentageText', true)
-            .classed('democrat', true)
-            .text(electionResult[0]['D_Nominee_prop']);
-
-
-        this.svg.append("text").attr('x', xscale(sum))
-            .attr('y', 70)
-            .classed('votesPercentageText', true)
-            .classed('republican', true)
-            .text(electionResult[0]['R_PopularPercentage']);
-        this.svg.append("text").attr('x', xscale(sum))
-            .attr('y', 40)
-            .classed('votesPercentageText', true)
-            .classed('republican', true)
-            .text(electionResult[0]['I_Nominee_prop']);
-
-        //Display a bar with minimal width in the center of the bar chart to indicate the 50% mark
-        //HINT: Use .middlePoint class to style this bar.
-
-        this.svg.append("rect").attr("y", 70)
-            .attr('x', xscale(sum/2))
-            .attr('width', 5)
-            .attr('height', 50)
-            .classed('middlePoint', true);
-
-        //Just above this, display the text mentioning details about this mark on top of this bar
-        //HINT: Use .votesPercentageNote class to style this text element
-
-        this.svg.append("text")
-            .attr('x',xscale(sum/2))
-            .attr("y",60)
-            .classed("votesPercentageNote", true)
-            .text("Popular Vote (50%)");
-
-
-        //Call the tool tip on hover over the bars to display stateName, count of electoral votes.
-        //then, vote percentage and number of votes won by each party.
-
-        this.svg.call(tip);
-        this.svg.selectAll("rect").on("mouseover", tip.show)
-            .on("mouseout", tip.hide);
 
         //add brush info here!!
     };
