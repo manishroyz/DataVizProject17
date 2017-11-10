@@ -3,103 +3,82 @@
         let circleChart = new CircleChart(selectionChart);
 
 
-        //load the data corresponding to all the election years
-        //pass this data and instances of all the charts that update on year selection to yearChart's constructor
-        /*
-        d3.csv("data/yearwiseWinner.csv", function (error, electionWinners) {
-            let mapChart = new MapChart(circleChart, timeChart, electionWinners);
-            mapChart.update();
-        });
-        */
+     	
+		/* Lama's work */
+		d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
+		
+		   
+		   console.log(data);
+	
+		   var map = new google.maps.Map(d3.select("#map").node(), {
+  zoom: 8,
+  center: new google.maps.LatLng(42.351246, -71.115639),
+  mapTypeId: google.maps.MapTypeId.Satellite,
+  zoom: 13,
+  styles: [{
+    stylers: [{
+      saturation: -100
+    }]
+  }]
+});
+		   
+		   if (error) throw error;
 
-        //COMMENTED FOR REFERENCE
-        /*
-        d3.csv("data/201601-citibike-tripdata.csv", function (error, bikeData) {
+  var overlay = new google.maps.OverlayView();
 
-            let parser = d3.timeParse("%m/%d/%Y %H:%M:%S");
+  // Add the container when the overlay is added to the map.
+  overlay.onAdd = function() {
+    var layer = d3.select(this.getPanes().overlayLayer).append("div")
+        .attr("class", "stations");
 
-            // CREATING TIME OBJECT
-            //let times = []; //[{"Year": "", "Month": "", "Day": "", "Hour": ""}];
-            //let year = parsedDate.getFullYear();
-            //let month = parsedDate.getMonth();
-            //let day = parsedDate.getDate();
-            //let hour = parsedDate.getHours();
-            //console.log(year);
-            //console.log(month);
-            //console.log(day);
-            //console.log(hour);
-            //times.push({year, month, day, hour });
-            //console.log(times);
+    // Draw each marker as a separate SVG element.
+    // We could use a single SVG, but what size would it have?
+    overlay.draw = function() {
+      var projection = this.getProjection(),
+          padding = 10;
 
-            // FILTERING DATA BASED ON DATE RANGE
-            let bikeDataFiltered =[];
-            let startDay = 5;
-            let endDay = 7;
-            bikeData.forEach(function (d) {
-                let parsedDate = parser(d['starttime']);
-                let day = parsedDate.getDate();
-                if(day >= startDay && day <= endDay){
-                    bikeDataFiltered.push(d);
-                }
-            });
-            console.log(bikeDataFiltered);
+		  
+		 
+			
+     var  marker = layer.selectAll("svg")
+          .data(d3.entries(data))
+          .each(transform) // update existing markers
+        .enter().append("svg")
+          .each(transform)
+          .attr("class", "marker");
 
-            // FETCHING ALL STATION IDS AND CONCATENATING THEM
-            let filteredStartStationId = bikeDataFiltered.map(function (d) {
-                return d['start station id'];
-            });
-            //console.log(filteredStartStationId);
-            let filteredEndStationId = bikeDataFiltered.map(function (d) {
-                return d['end station id'];
-            });
-            //console.log(filteredEndStationId);
-            let filteredAllStationId = filteredStartStationId.concat(filteredEndStationId);
-            //console.log(filteredAllStationId);
+      // Add a circle.
+      marker.append("circle")
+          .attr("r", 4.5)
+          .attr("cx", padding)
+          .attr("cy", padding);
 
-            window.stationIdsDistinct = [];
-            filteredAllStationId.forEach(function (d) {
-                let check = checkIfPresent(d);
-                if(!check){
-                    stationIdsDistinct.push(d);
-                }
-            });
-            console.log(stationIdsDistinct);
+      // Add a label.
+      marker.append("text")
+          .attr("x", padding + 7)
+          .attr("y", padding)
+          .attr("dy", ".31em")
+          .text(function(d) { return d.key; });
 
-            let stationIdsDistinctData = [];
-            for(let i=0; i< stationIdsDistinct.length; i++){
-                for(let j=0; j< bikeDataFiltered.length; j++){
-                    let flag = false;
-                    if(stationIdsDistinct[i] == bikeDataFiltered[j]['start station id'] ){
-                        stationIdsDistinctData.push( {  "stationId" : bikeDataFiltered[j]['start station id'] ,
-                            "stationName" : bikeDataFiltered[j]['start station name'],
-                            "stationLat" : bikeDataFiltered[j]['start station latitude'],
-                            "stationLon" : bikeDataFiltered[j]['start station longitude'] });
-                        flag = true;
-                    }
-                    else if(stationIdsDistinct[i] == bikeDataFiltered[j]['end station id'] ){
-                        stationIdsDistinctData.push( {  "stationId" : bikeDataFiltered[j]['end station id'] ,
-                            "stationName" : bikeDataFiltered[j]['end station name'],
-                            "stationLat" : bikeDataFiltered[j]['end station latitude'] ,
-                            "stationLon" : bikeDataFiltered[j]['end station longitude'] });
-                        flag = true;
-                    }
-                    if(flag == true)
-                        break;
-                }
-            }
-            console.log(stationIdsDistinctData);
+      function transform(d) {
+        d = new google.maps.LatLng(d.value.station_lat, d.value.station_lon);
+        d = projection.fromLatLngToDivPixel(d);
+        return d3.select(this)
+            .style("left", (d.x - padding) + "px")
+            .style("top", (d.y - padding) + "px");
+      }
+    };
+  };
 
-            let jso = JSON.stringify(stationIdsDistinctData);
-            //console.log(jso);
-        });
+  // Bind our overlay to the map…
+  overlay.setMap(map);
+  
+  
+  
+  
 
-        function checkIfPresent(inputVal) {
-            let flag = false;
-            stationIdsDistinct.forEach(function (d) {
-                if(inputVal == d ){
-                    flag = true;
-                }
-            });
-            return flag;
-        };
-        */
+			
+		});
+		
+			/* End of Lama's work */
+   
