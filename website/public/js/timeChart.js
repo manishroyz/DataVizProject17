@@ -52,7 +52,7 @@ class TimeChart {
         });
         for(let i = 13; i<=23; ++i){
             hours.push({
-                'text': i + "PM",
+                'text': (12-i) + "PM",
                 'value':i
             });
         }
@@ -183,11 +183,11 @@ class TimeChart {
 
         var hourbrush = d3.brushX().extent([[0,0],[hourscale(hoursum),this.svgHeight]]).on("end", function(){
             // console.log(d3.event.selection);
-            let selection = days.filter((d,i)=>{
+            let selection = hours.filter((d,i)=>{
                 // console.log(d['x']);
                 if(d3.event.selection==null)
                     return false;
-                if(dayscale(i)>=d3.event.selection[0] && dayscale(i+1)<=d3.event.selection[1])
+                if(hourscale(i)>=d3.event.selection[0] && hourscale(i+1)<=d3.event.selection[1])
                     return true;
                 return false;
             });
