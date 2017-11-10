@@ -9,8 +9,7 @@
 		
 		   
 		   console.log(data);
-	
-		   var map = new google.maps.Map(d3.select("#map").node(), {
+           let map = new google.maps.Map(d3.select("#map").node(), {
   zoom: 8,
   center: new google.maps.LatLng(42.351246, -71.115639),
   mapTypeId: google.maps.MapTypeId.Satellite,

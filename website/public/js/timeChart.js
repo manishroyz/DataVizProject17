@@ -29,7 +29,55 @@ class TimeChart {
             .attr("width",this.svgWidth)
             .attr("height",this.svgHeight);
 
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let months = [{
+            'text': "Jan",
+            'value': 1
+            },
+            {
+                'text': "Feb",
+                'value': 2
+            },
+            {
+                'text': "Mar",
+                'value': 3
+            },
+            {
+                'text': "Apr",
+                'value': 4
+            },
+            {
+                'text': "May",
+                'value': 5
+            },
+            {
+                'text': "Jun",
+                'value': 6
+            },
+            {
+                'text': "Jul",
+                'value': 7
+            },
+            {
+                'text': "Aug",
+                'value': 8
+            },
+            {
+                'text': "Sep",
+                'value': 9
+            },
+            {
+                'text': "Oct",
+                'value': 10
+            },
+            {
+                'text': "Nov",
+                'value': 11
+            },
+            {
+                'text': "Dec",
+                'value': 12
+            }];
+
         let days = [];
         let hours = [
             {
@@ -61,9 +109,9 @@ class TimeChart {
             'value':0
         });
 
-        this.selectedMonths = months;
+        this.selectedMonths = months.map(d=>d.value);
         this.selectedDays = days;
-        this.selectedHours = hours;
+        this.selectedHours = hours.map(d=>d.value);
 
         let monthsum = 12;
         let daysum = 31;
@@ -115,7 +163,7 @@ class TimeChart {
         let monthtexts = this.monthsvg.selectAll("text").data(months);
         monthtexts = monthtexts.enter().append("text").merge(monthtexts);
         monthtexts.exit().remove();
-        monthtexts.text(d=>d)
+        monthtexts.text(d=>d.text)
             .attr("x", function(d,i){
                 return monthscale(i+0.5);
             })
@@ -158,7 +206,8 @@ class TimeChart {
                 if(monthscale(i)>=d3.event.selection[0] && monthscale(i+1)<=d3.event.selection[1])
                     return true;
                 return false;
-            });
+            })
+                .map(d=>d.value);
             // console.log(selection.data().map(d=>d['__data__']));
             that.selection.selectedMonths = selection;
             that.selectionChart.update(that.selection);
@@ -190,7 +239,8 @@ class TimeChart {
                 if(hourscale(i)>=d3.event.selection[0] && hourscale(i+1)<=d3.event.selection[1])
                     return true;
                 return false;
-            });
+            })
+                .map(d=>d.value);
             // console.log(selection.data().map(d=>d['__data__']));
             that.selection.selectedHours = selection;
             that.selectionChart.update(that.selection);
