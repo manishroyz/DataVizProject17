@@ -1,12 +1,12 @@
-        let selectionChart = new SelectionChart();
-        let timeChart = new TimeChart(selectionChart);
-        let circleChart = new CircleChart(selectionChart);
+
 
 
      	
 		/* Lama's work */
 		d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
-		
+            let circleChart = new CircleChart(data);
+            let selectionChart = new SelectionChart(circleChart);
+            let timeChart = new TimeChart(selectionChart);
 		   
 		   console.log(data);
            let map = new google.maps.Map(d3.select("#map").node(), {

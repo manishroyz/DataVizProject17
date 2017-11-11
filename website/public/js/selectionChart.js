@@ -4,8 +4,9 @@ class SelectionChart {
     /**
      * Initializes the svg elements required for this chart;
      */
-    constructor(){
-        this.divSelectionChart = d3.select("#selection-chart").classed("sideBar", true);
+    constructor(circleChart){
+        this.circleChart = circleChart;
+        // this.divSelectionChart = d3.select("#selection-chart").classed("sideBar", true);
     };
 
     /**
@@ -15,6 +16,7 @@ class SelectionChart {
      */
     update(selectedTime){
         console.log(selectedTime);
+        let that = this;
 
         //Update the visualization on brush events over the Circle chart
         d3.csv("data/BostonMA.csv", function (error, bikeData) {
@@ -24,9 +26,9 @@ class SelectionChart {
             let selectedDays = selectedTime['selectedDays'];
             let selectedHours = selectedTime['selectedHours'];
 
-            //console.log(selectedMonths);
-            //console.log(selectedDays);
-            //console.log(selectedHours);
+            console.log(selectedMonths);
+            console.log(selectedDays);
+            console.log(selectedHours);
 
             let startMonth =selectedMonths[0];
             let endMonth = selectedMonths[(selectedMonths.length)-1];
@@ -60,7 +62,10 @@ class SelectionChart {
                     bikeDataFiltered.push(d);
                 }
             });
+
+
             console.log(bikeDataFiltered);
+            that.circleChart.update(bikeDataFiltered);
         });
 
     };
