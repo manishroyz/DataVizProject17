@@ -9,7 +9,7 @@ class TimeChart {
         let that = this;
 
         this.margin = {top: 30, right: 20, bottom: 30, left: 50};
-        let divTimeChart = d3.select("#time-chart").classed("content", true);
+        let divTimeChart = d3.select("#time-bars").classed("content", true);
 
         //fetch the svg bounds
         this.svgBounds = divTimeChart.node().getBoundingClientRect();
@@ -28,6 +28,17 @@ class TimeChart {
         this.hoursvg = divTimeChart.append("svg")
             .attr("width",this.svgWidth)
             .attr("height",this.svgHeight);
+
+        this.buttonsvg = d3.select("#update-button").append("svg")
+            .attr("width", 90)
+            .attr("height",90);
+
+        this.buttonsvg.append("rect")
+            .attr("x",0)
+            .attr("y", 0)
+            .attr("width", 90)
+            .attr("height", 90)
+            .classed("timeBar", true);
 
         let months = [{
             'text': "Jan",
@@ -190,6 +201,12 @@ class TimeChart {
             .attr("y",this.svgHeight-5)
             .classed("timeBarText", true);
 
+        this.buttonsvg.append("text")
+            .attr("x",45)
+            .attr("y", 55)
+            .text("Update")
+            .classed("timeBarText", true);
+
         this.selection = {
             'selectedMonths': this.selectedMonths,
             'selectedDays' : this.selectedDays,
@@ -210,7 +227,7 @@ class TimeChart {
                 .map(d=>d.value);
             // console.log(selection.data().map(d=>d['__data__']));
             that.selection.selectedMonths = selection;
-            that.selectionChart.update(that.selection);
+            // that.selectionChart.update(that.selection);
         });
         this.monthsvg.append("g").attr("class", "brush").call(monthbrush);
 
@@ -226,7 +243,7 @@ class TimeChart {
             });
             // console.log(selection.data().map(d=>d['__data__']));
             that.selection.selectedDays = selection;
-            that.selectionChart.update(that.selection);
+            // that.selectionChart.update(that.selection);
         });
         this.daysvg.append("g").attr("class", "brush").call(daybrush);
 
@@ -243,10 +260,14 @@ class TimeChart {
                 .map(d=>d.value);
             // console.log(selection.data().map(d=>d['__data__']));
             that.selection.selectedHours = selection;
-            that.selectionChart.update(that.selection);
+            // that.selectionChart.update(that.selection);
         });
 
         this.hoursvg.append("g").attr("class", "brush").call(hourbrush);
+
+        this.buttonsvg.on("click",function(){
+           that.selectionChart.update(that.selection);
+        });
 
 
 

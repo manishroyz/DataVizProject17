@@ -5,8 +5,8 @@ class CircleChart {
      * Initializes the svg elements required to lay the tiles
      * and to populate the legend.
      */
-    constructor(){
-
+    constructor(data){
+        this.stationData = data;
         let divCircles = d3.select("#circle-chart-content").classed("content", true);
         this.margin = {top: 30, right: 20, bottom: 30, left: 50};
         //Gets access to the div element created for this chart and legend element from HTML
@@ -55,48 +55,69 @@ class CircleChart {
      * @param colorScale global quantile scale based on the selection
      *
      */
-    update (cityBikeInfo, colorScale){
+    update (cityBikeInfo){
+        console.log(cityBikeInfo);
+
+        //find out top 7 stations
+        let stationCount =this.stationData;
+
+        stationCount.forEach(function(d){
+            d['count']=0;
+            cityBikeInfo.forEach(c=>{
+                if(c['start station id'] === d['station_id'])
+                    d['count']++;
+                if(c['end station id'] === d['station_id'])
+                    d['count']++;
+            });
+        });
+        stationCount = stationCount.sort((a,b)=>{
+            if(a['count']>b['count'])
+            return -1;
+            else return 1;
+        });
+        console.log("top stations found!")
+        console.log(stationCount);
 
 
         //Creates a legend element and assigns a scale that needs to be visualized
-        this.legendSvg.append("g")
-            .attr("class", "legendQuantile")
-            .attr("transform", "translate(0,50)");
-
-        let legendQuantile = d3.legendColor()
-            .shapeWidth(100)
-            .cells(10)
-            .orient('horizontal')
-            .scale(colorScale);
-
-        this.legendSvg.select(".legendQuantile")
-            .call(legendQuantile);
-
-        //for reference:https://github.com/Caged/d3-tip
-        //Use this tool tip element to handle any hover over the chart
-        let tip = d3.tip().attr('class', 'd3-tip')
-            .direction('se')
-            .offset(function() {
-                return [0,0];
-            })
-            .html((d)=>{
-                /* populate data in the following format */
-                // let tooltip_data = {
-                //     "state": d['State'],
-                //     "winner":d['State_Winner'],
-                //     "electoralVotes" : d['Total_EV'],
-                //     "result":[
-                //         {"nominee": d['D_Nominee_prop'],"votecount": d['D_Votes'],"percentage": d['D_Percentage'],"party":"D"} ,
-                //         {"nominee": d['R_Nominee_prop'],"votecount": d['R_Votes'],"percentage": d['R_Percentage'],"party":"R"} ,
-                //         {"nominee": d['I_Nominee_prop'],"votecount": d['I_Votes'],"percentage": d['I_Percentage'],"party":"I"}
-                //     ]
-                // };
-                //* pass this as an argument to the tooltip_render function then,
-                // return the HTML content returned from that method.
-
-                // return that.tooltip_render(tooltip_data);
-                return;
-            });
+        // this.legendSvg.append("g")
+        //     .attr("class", "legendQuantile")
+        //     .attr("transform", "translate(0,50)");
+        //
+        // let legendQuantile = d3.legendColor()
+        //     .shapeWidth(100)
+        //     .cells(10)
+        //     .orient('horizontal')
+        //     .scale(colorScale);
+        //
+        // this.legendSvg.select(".legendQuantile")
+        //     .call(legendQuantile);
+        //
+        // //for reference:https://github.com/Caged/d3-tip
+        // //Use this tool tip element to handle any hover over the chart
+        // let tip = d3.tip().attr('class', 'd3-tip')
+        //     .direction('se')
+        //     .offset(function() {
+        //         return [0,0];
+        //     })
+        //     .html((d)=>{
+        //         /* populate data in the following format */
+        //         // let tooltip_data = {
+        //         //     "state": d['State'],
+        //         //     "winner":d['State_Winner'],
+        //         //     "electoralVotes" : d['Total_EV'],
+        //         //     "result":[
+        //         //         {"nominee": d['D_Nominee_prop'],"votecount": d['D_Votes'],"percentage": d['D_Percentage'],"party":"D"} ,
+        //         //         {"nominee": d['R_Nominee_prop'],"votecount": d['R_Votes'],"percentage": d['R_Percentage'],"party":"R"} ,
+        //         //         {"nominee": d['I_Nominee_prop'],"votecount": d['I_Votes'],"percentage": d['I_Percentage'],"party":"I"}
+        //         //     ]
+        //         // };
+        //         //* pass this as an argument to the tooltip_render function then,
+        //         // return the HTML content returned from that method.
+        //
+        //         // return that.tooltip_render(tooltip_data);
+        //         return;
+        //     });
 
     };
 
