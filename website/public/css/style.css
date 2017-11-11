@@ -29,6 +29,16 @@ html, body, #map {
     padding-bottom: 20px;
 }
 
+.circles {
+    fill: green;
+    stroke: black;
+    stroke-width: 1.5px;
+}
+
+.circleText {
+    text-anchor: middle;
+    font-size: 24px;
+}
 body {
     font-family: Lato;
 }

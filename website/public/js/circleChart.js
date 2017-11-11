@@ -75,8 +75,67 @@ class CircleChart {
             return -1;
             else return 1;
         });
-        console.log("top stations found!")
-        console.log(stationCount);
+        let topstations = [];
+        let mult = 100;
+        let positions_in_circle = [
+            {
+                'x': mult*5,
+                'y': 1.838*mult
+            },
+            {
+                'x': mult*7.74,
+                'y': 3.421*mult
+            },
+            {
+                'x': mult*7.72,
+                'y': 6.613*mult
+            },
+            {
+                'x': mult*5.84,
+                'y': 8.049*mult
+            },
+            {
+                'x': mult*3.16,
+                'y': 7.752*mult
+            },
+            {
+                'x': mult*1.864,
+                'y': 5.407*mult
+            },
+            {
+                'x': mult*2.56,
+                'y': 2.988*mult
+            }
+        ];
+
+        for(let i = 0; i<7; ++i){
+            topstations.push(stationCount[i]);
+            topstations[i]['x']= positions_in_circle[i]['x'];
+            topstations[i]['y']= positions_in_circle[i]['y'];
+        }
+        console.log(topstations);
+
+
+        let circles = this.svg.selectAll("circle").data(topstations);
+        circles.exit().remove();
+        circles = circles.enter().append("circle").merge(circles);
+
+        circles.attr("cx", d=> d['x'])
+            .attr("cy", d=> d['y'])
+            .attr("r", 30)
+            .classed("circles", true);
+
+
+        this.svg.attr("transform", "translate(600, -300)");
+
+        let circle_texts = this.svg.selectAll("text").data(topstations);
+        circle_texts.exit().remove();
+        circle_texts = circle_texts.enter().append("text").merge(circle_texts);
+
+        circle_texts.attr("x", d=> d['x'])
+            .attr("y", d=> d['y']+45)
+            .text(d=> d['station_name'])
+            .classed("circleText", true);
 
 
         //Creates a legend element and assigns a scale that needs to be visualized
