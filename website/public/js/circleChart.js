@@ -59,9 +59,36 @@ class CircleChart {
         console.log(cityBikeInfo);
 
         //find out top 7 stations
-        let stationCount =this.stationData;
+        let stationList =this.stationData;
 
-        stationCount.forEach(function(d){
+        let edges = [];
+        for(let i = 0; i < stationList.length; ++i){
+            for(let j = i+1; j<stationList.length; ++j){
+                let x = [];
+                x['station1'] = stationList[i];
+                x['station2'] = stationList[j];
+                x['total'] = 0;
+                edges.push(x);
+            }
+        }
+
+        cityBikeInfo.forEach(function(r){
+           edges.forEach(function(e) {
+                   if ((e['station1']['station_id'] === r['start station id'] && e['station2']['station_id'] === r['end station id']) ||
+                       (e['station2']['station_id'] === r['start station id'] && e['station1']['station_id'] === r['end station id'])) {
+                       e['total']++;
+                   }
+               });
+        });
+        edges.sort((a,b)=>{
+            if(a['total']>b['total'])
+                return -1;
+            else return 1;
+        });
+        for(let i = 0 ; i < 7; ++i){
+
+        }
+        stationList.forEach(function(d){
             d['count']=0;
             cityBikeInfo.forEach(c=>{
                 if(c['start station id'] === d['station_id'])
@@ -70,14 +97,28 @@ class CircleChart {
                     d['count']++;
             });
         });
-        stationCount = stationCount.sort((a,b)=>{
+        stationList = stationList.sort((a,b)=>{
             if(a['count']>b['count'])
             return -1;
             else return 1;
         });
+        let pairs = [];
         let topstations = [];
+        for(let i = 0 ; i < 7; ++i){
+            if(!topstations.includes(edges[i]['station1'])){
+                topstations.push(edges[i]['station1']);
+            }
+            if(!topstations.includes(edges[i]['station2'])){
+                topstations.push(edges[i]['station2']);
+            }
+            pairs.push(edges[i]);
+            if(topstations.length==7 ||topstations.length == 8)
+                break;
+        }
+        console.log(topstations);
+        console.log(pairs);
         let mult = 100;
-        let positions_in_circle = [
+        let odd_positions = [
             {
                 'x': mult*5,
                 'y': 1.838*mult
@@ -108,13 +149,65 @@ class CircleChart {
             }
         ];
 
-        for(let i = 0; i<7; ++i){
-            topstations.push(stationCount[i]);
-            topstations[i]['x']= positions_in_circle[i]['x'];
-            topstations[i]['y']= positions_in_circle[i]['y'];
+        let even_positions = [
+            {
+                'x': mult*5,
+                'y': 1.838*mult
+            },
+            {
+                'x': mult*7.38,
+                'y': 2.92*mult
+            },
+            {
+                'x': mult*8.16,
+                'y': 4.88*mult
+            },
+            {
+                'x': mult*7.2,
+                'y': 7.27*mult
+            },
+            {
+                'x': mult*5,
+                'y': 8.16*mult
+            },
+            {
+                'x': mult*2.7,
+                'y': 7.17*mult
+            },
+            {
+                'x': mult*1.84,
+                'y': 4.88*mult
+            },
+            {
+                'x': mult*2.72,
+                'y': 2.81*mult
+            }
+        ];
+
+        if(topstations.length==7){
+            for(let i = 0; i<7; ++i){
+                topstations[i]['x']= odd_positions[i]['x'];
+                topstations[i]['y']= odd_positions[i]['y'];
+            }
+        }
+        else{
+            for(let i = 0; i<8; ++i){
+                topstations[i]['x']= even_positions[i]['x'];
+                topstations[i]['y']= even_positions[i]['y'];
+            }
         }
         console.log(topstations);
 
+
+        // cityBikeInfo.forEach(function(v){
+        //    for(let i = 0 ; i < edges.length; ++i){
+        //        if((edges[i]['station1']['station_id'] === v['start station id'] && edges[i]['station2']['station_id'] === v['end station id']) ||
+        //            (edges[i]['station2']['station_id'] === v['start station id'] && edges[i]['station1']['station_id'] === v['end station id'])){
+        //            edges[i]['total']++;
+        //        }
+        //    }
+        // });
+        // console.log(edges);
 
         let circles = this.svg.selectAll("circle").data(topstations);
         circles.exit().remove();

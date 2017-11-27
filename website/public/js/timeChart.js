@@ -16,12 +16,7 @@ class TimeChart {
         this.svgWidth = this.svgBounds.width - this.margin.left - this.margin.right;
         this.svgHeight = 30;
 
-        //add the svg to the div
         this.monthsvg = divTimeChart.append("svg")
-            .attr("width",this.svgWidth)
-            .attr("height",this.svgHeight);
-
-        this.daysvg = divTimeChart.append("svg")
             .attr("width",this.svgWidth)
             .attr("height",this.svgHeight);
 
@@ -111,7 +106,7 @@ class TimeChart {
         });
         for(let i = 13; i<=23; ++i){
             hours.push({
-                'text': (12-i) + "PM",
+                'text': (i-12) + "PM",
                 'value':i
             });
         }
@@ -131,9 +126,9 @@ class TimeChart {
         let monthscale = d3.scaleLinear()
             .domain([0, monthsum ])
             .range([0, this.svgWidth]);
-        let dayscale = d3.scaleLinear()
-            .domain([0, daysum ])
-            .range([0, this.svgWidth]);
+        // let dayscale = d3.scaleLinear()
+        //     .domain([0, daysum ])
+        //     .range([0, this.svgWidth]);
         let hourscale = d3.scaleLinear()
             .domain([0, hoursum ])
             .range([0, this.svgWidth]);
@@ -149,16 +144,16 @@ class TimeChart {
             .attr("y",0)
             .classed("timeBar", true);
 
-        let dayrects = this.daysvg.selectAll("rect").data(days);
-        dayrects = dayrects.enter().append("rect").merge(dayrects);
-        dayrects.exit().remove();
-        dayrects.attr("height", this.svgHeight)
-            .attr("width", this.svgWidth/daysum)
-            .attr("x", function(d,i){
-                return dayscale(i);
-            })
-            .attr("y",0)
-            .classed("timeBar", true);
+        // let dayrects = this.daysvg.selectAll("rect").data(days);
+        // dayrects = dayrects.enter().append("rect").merge(dayrects);
+        // dayrects.exit().remove();
+        // dayrects.attr("height", this.svgHeight)
+        //     .attr("width", this.svgWidth/daysum)
+        //     .attr("x", function(d,i){
+        //         return dayscale(i);
+        //     })
+        //     .attr("y",0)
+        //     .classed("timeBar", true);
 
         let hourrects = this.hoursvg.selectAll("rect").data(hours);
         hourrects = hourrects.enter().append("rect").merge(hourrects);
@@ -181,15 +176,15 @@ class TimeChart {
             .attr("y",this.svgHeight-5)
             .classed("timeBarText", true);
 
-        let daytexts = this.daysvg.selectAll("text").data(days);
-        daytexts = daytexts.enter().append("text").merge(daytexts);
-        daytexts.exit().remove();
-        daytexts.text(d=>d)
-            .attr("x", function(d,i){
-                return dayscale(i+0.5);
-            })
-            .attr("y",this.svgHeight-5)
-            .classed("timeBarText", true);
+        // let daytexts = this.daysvg.selectAll("text").data(days);
+        // daytexts = daytexts.enter().append("text").merge(daytexts);
+        // daytexts.exit().remove();
+        // daytexts.text(d=>d)
+        //     .attr("x", function(d,i){
+        //         return dayscale(i+0.5);
+        //     })
+        //     .attr("y",this.svgHeight-5)
+        //     .classed("timeBarText", true);
 
         let hourtexts = this.hoursvg.selectAll("text").data(hours);
         hourtexts = hourtexts.enter().append("text").merge(hourtexts);
@@ -208,59 +203,39 @@ class TimeChart {
             .classed("timeBarText", true);
 
         this.selection = {
-            'selectedMonths': this.selectedMonths,
-            'selectedDays' : this.selectedDays,
-            'selectedHours' : this.selectedHours
+            'start': {
+                'month': 1,
+                'day' : 1,
+                'hour': 0,
+                'minute' : 0
+            },
+            'end': {
+                'month': 12,
+                'day' : 31,
+                'hour': 23,
+                'minute' : 59
+            }
         };
 
         //add brush info here!
         var monthbrush = d3.brushX().extent([[0,0],[monthscale(monthsum),this.svgHeight]]).on("end", function(){
-            // console.log(d3.event.selection);
-            let selection = months.filter((d,i)=>{
-                // console.log(d['x']);
-                if(d3.event.selection==null)
-                    return false;
-                if(monthscale(i)>=d3.event.selection[0] && monthscale(i+1)<=d3.event.selection[1])
-                    return true;
-                return false;
-            })
-                .map(d=>d.value);
-            // console.log(selection.data().map(d=>d['__data__']));
-            that.selection.selectedMonths = selection;
-            // that.selectionChart.update(that.selection);
+            let widthOfRect = monthscale(11)-monthscale(10);
+            that.selection.start.month = parseInt(d3.event.selection[0]/widthOfRect)+1;
+            that.selection.start.day = parseInt((d3.event.selection[0]%widthOfRect)*31/widthOfRect)+1;
+            that.selection.end.month = parseInt(d3.event.selection[1]/widthOfRect)+1;
+            that.selection.end.day = parseInt((d3.event.selection[1]%widthOfRect)*31/widthOfRect)+1;
+            console.log(that.selection);
         });
+
         this.monthsvg.append("g").attr("class", "brush").call(monthbrush);
 
-        var daybrush = d3.brushX().extent([[0,0],[dayscale(daysum),this.svgHeight]]).on("end", function(){
-            // console.log(d3.event.selection);
-            let selection = days.filter((d,i)=>{
-                // console.log(d['x']);
-                if(d3.event.selection==null)
-                    return false;
-                if(dayscale(i)>=d3.event.selection[0] && dayscale(i+1)<=d3.event.selection[1])
-                    return true;
-                return false;
-            });
-            // console.log(selection.data().map(d=>d['__data__']));
-            that.selection.selectedDays = selection;
-            // that.selectionChart.update(that.selection);
-        });
-        this.daysvg.append("g").attr("class", "brush").call(daybrush);
-
         var hourbrush = d3.brushX().extent([[0,0],[hourscale(hoursum),this.svgHeight]]).on("end", function(){
-            // console.log(d3.event.selection);
-            let selection = hours.filter((d,i)=>{
-                // console.log(d['x']);
-                if(d3.event.selection==null)
-                    return false;
-                if(hourscale(i)>=d3.event.selection[0] && hourscale(i+1)<=d3.event.selection[1])
-                    return true;
-                return false;
-            })
-                .map(d=>d.value);
-            // console.log(selection.data().map(d=>d['__data__']));
-            that.selection.selectedHours = selection;
-            // that.selectionChart.update(that.selection);
+            let widthOfRect = hourscale(11)-hourscale(10);
+            that.selection.start.hour = parseInt(d3.event.selection[0]/widthOfRect);
+            that.selection.start.minute = parseInt((d3.event.selection[0]%widthOfRect)*60/widthOfRect);
+            that.selection.end.hour = parseInt(d3.event.selection[1]/widthOfRect);
+            that.selection.end.minute = parseInt((d3.event.selection[1]%widthOfRect)*60/widthOfRect);
+            console.log(that.selection);
         });
 
         this.hoursvg.append("g").attr("class", "brush").call(hourbrush);
