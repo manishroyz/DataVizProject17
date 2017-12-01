@@ -4,7 +4,8 @@ class TimeChart {
     /**
      * Initializes the svg elements required for this chart;
      */
-    constructor(selectionChart){
+    constructor(selectionChart,lineChart){
+		let lineChrt = lineChart;
         this.selectionChart = selectionChart;
         let that = this;
 
@@ -231,9 +232,34 @@ class TimeChart {
         this.hoursvg.append("g").attr("class", "brush").call(hourbrush);
 
         this.buttonsvg.on("click",function(){
-           that.selectionChart.update(that.selection);
+         //  that.selectionChart.update(that.selection);
+		   
+		   let selectedStationsData=[];
+			selectedStationsData.push("178");//("67");
+			selectedStationsData.push("80");//("22");
+			//passing the Start date by day and month 
+			selectedStationsData.push("01/01/2016 00:00");
+			selectedStationsData.push("08/01/2016 23:59");  //This is the end date
+			//selectedStationsData.push( that.selection.selectedDays);
+			//selectedStationsData.push(that.selection.selectedMonths);
+			//selectedStationsData.push( that.selection.selectedHours);
+			selectedStationsData.push(100);
+			
+		//	console.log(that.selection);
+			
+				lineChrt.update(selectedStationsData);
+				
+				
+				  let selectedDays=[];
+			selectedDays.push("01/01/2016");
+			selectedDays.push("09/15/2016");
+			selectedDays.push("07/01/2016");
+				lineChrt.updateHoursLineChart(selectedDays,selectedStationsData[0],selectedStationsData[1]);
+		
         });
-
+		
+		
+	
 
 
     }
