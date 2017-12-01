@@ -23,6 +23,10 @@ html, body, #map {
   stroke-width: 1.5px;
 }
 
+.linegroup line{
+    stroke:darkGrey;
+}
+
 #time-chart {
     padding-left: 15%;
     padding-top: 20px;

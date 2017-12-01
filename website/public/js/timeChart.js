@@ -176,16 +176,6 @@ class TimeChart {
             .attr("y",this.svgHeight-5)
             .classed("timeBarText", true);
 
-        // let daytexts = this.daysvg.selectAll("text").data(days);
-        // daytexts = daytexts.enter().append("text").merge(daytexts);
-        // daytexts.exit().remove();
-        // daytexts.text(d=>d)
-        //     .attr("x", function(d,i){
-        //         return dayscale(i+0.5);
-        //     })
-        //     .attr("y",this.svgHeight-5)
-        //     .classed("timeBarText", true);
-
         let hourtexts = this.hoursvg.selectAll("text").data(hours);
         hourtexts = hourtexts.enter().append("text").merge(hourtexts);
         hourtexts.exit().remove();
