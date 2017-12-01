@@ -38,6 +38,7 @@ class CircleChart {
     //  */
     tooltip_render(tooltip_data) {
         let text = "<h2 class ='count' > Total: " + tooltip_data.count + "</h2>";
+        console.log("in tooltip")
         return text;
     }
 
@@ -95,7 +96,7 @@ class CircleChart {
         });
         let pairs = [];
         let topstations = [];
-        for(let i = 0 ; i < 7; ++i){
+        for(let i = 0 ; i < 10; ++i){
             if(!topstations.includes(edges[i]['station1'])){
                 topstations.push(edges[i]['station1']);
             }
@@ -206,7 +207,8 @@ class CircleChart {
 
         let linewidthscale = d3.scaleLinear()
             .domain([d3.min(pairs, p=>p['total']), d3.max(pairs, p=>p['total'])])
-            .range([3, 30]);
+            .range([5, 30]);
+
         linegroups.each(function(d){
             d3.select(this).selectAll('*').remove();
             d3.select(this).append('line').attr("x1", d['station1']['x'])
@@ -215,8 +217,6 @@ class CircleChart {
                 .attr('y2', d['station2']['y'])
                 .style('stroke-width', linewidthscale(d['total']));
         });
-
-
 
         let circles = this.svg.selectAll("circle").data(topstations);
         circles.exit().remove();
@@ -279,7 +279,7 @@ class CircleChart {
                 // return;
             });
         this.svg.call(tip);
-        this.svg.selectAll("g .linegroup line").on('mouseover', tip.show)
+        linegroups.on('mouseover', tip.show)
             .on('mouseout', tip.hide);
     };
 

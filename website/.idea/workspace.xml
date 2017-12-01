@@ -34,11 +34,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="circleChart.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="circleChart.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/circleChart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
-              <caret line="281" column="16" lean-forward="false" selection-start-line="281" selection-start-column="16" selection-end-line="281" selection-end-column="16" />
+            <state relative-caret-position="178">
+              <caret line="209" column="21" lean-forward="false" selection-start-line="209" selection-start-column="21" selection-end-line="209" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -64,11 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="selectionChart.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="selectionChart.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/selectionChart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="64" column="45" lean-forward="true" selection-start-line="64" selection-start-column="45" selection-end-line="64" selection-end-column="45" />
+            <state relative-caret-position="-245">
+              <caret line="21" column="8" lean-forward="true" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -121,8 +121,8 @@
         <option value="$PROJECT_DIR$/main.html" />
         <option value="$PROJECT_DIR$/public/css/style.css" />
         <option value="$PROJECT_DIR$/public/js/timeChart.js" />
-        <option value="$PROJECT_DIR$/public/js/circleChart.js" />
         <option value="$PROJECT_DIR$/public/js/selectionChart.js" />
+        <option value="$PROJECT_DIR$/public/js/circleChart.js" />
       </list>
     </option>
   </component>
@@ -230,12 +230,12 @@
       <workItem from="1510873208402" duration="521000" />
       <workItem from="1511221006964" duration="5156000" />
       <workItem from="1511760255486" duration="11318000" />
-      <workItem from="1512085465207" duration="4592000" />
+      <workItem from="1512085465207" duration="6040000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38831000" />
+    <option name="totallyTimeSpent" value="40279000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="6" y="23" width="1268" height="716" extended-state="0" />
@@ -274,7 +274,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/public/js/circleChart.js</url>
-          <line>71</line>
+          <line>72</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
@@ -567,18 +567,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/circleChart.js">
+    <entry file="file://$PROJECT_DIR$/public/js/selectionChart.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="281" column="16" lean-forward="false" selection-start-line="281" selection-start-column="16" selection-end-line="281" selection-end-column="16" />
+        <state relative-caret-position="-245">
+          <caret line="21" column="8" lean-forward="true" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/selectionChart.js">
+    <entry file="file://$PROJECT_DIR$/public/js/circleChart.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="64" column="45" lean-forward="true" selection-start-line="64" selection-start-column="45" selection-end-line="64" selection-end-column="45" />
+        <state relative-caret-position="178">
+          <caret line="209" column="21" lean-forward="false" selection-start-line="209" selection-start-column="21" selection-end-line="209" selection-end-column="21" />
           <folding />
         </state>
       </provider>
