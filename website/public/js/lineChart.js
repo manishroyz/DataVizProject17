@@ -6,18 +6,31 @@ class LineChart {
 	constructor(data){
 		
 		 let divLineChart = d3.select("#line-chart").classed("content", true);
+		 let divHoursLineChart = d3.select("#hours-line-chart").classed("content", true);
+		 
 		   this.margin = {top: 20, right: 200, bottom: 100, left: 50};
-        
-	
-	
-	 this.svgWidth = 960 - this.margin.left - this.margin.right;
+	 this.svgWidth = 1000 - this.margin.left - this.margin.right;
 	  this.svgHeight = 500 - this.margin.top - this.margin.bottom;
        
         this.svg = divLineChart.append("svg")
             .attr("width",this.svgWidth+ this.margin.left + this.margin.right)
             .attr("height",this.svgHeight+ this.margin.top + this.margin.bottom)
 			.attr("transform", "translate(" + this.margin.right + "," + this.margin.top + ")");
-			//.classed("line-chrt",true);
+			
+			
+			
+			 // Set the dimensions of the canvas / graph
+ this.marginHoursChart = {top: 40, right: 100, bottom: 70, left: 50},
+    this.widthHoursLineChart = 850 - this.marginHoursChart.left - this.marginHoursChart.right,
+    this.heightHoursLineChart = 500 - this.marginHoursChart.top - this.marginHoursChart.bottom;
+			
+			this.svgHoursLineChart = divHoursLineChart.append("svg")
+        .attr("width", this.widthHoursLineChart + this.marginHoursChart.left + this.marginHoursChart.right)
+        .attr("height", this.heightHoursLineChart + this.marginHoursChart.top + this.marginHoursChart.bottom)
+		 .append("g")
+        .attr("transform", 
+              "translate(" + this.marginHoursChart.left + "," + this.marginHoursChart.top + ")");
+			
 			
 			
 			let colors = [
@@ -92,12 +105,13 @@ let mySelf = this;
 	
 	
 		
-			
+			let tripsCountSelected = 0;
 			
 			 // format the data
   tripsWithCount.forEach(function(d) {
       d.key = parseTime(d.key);
       d.value = d.value;
+	  tripsCountSelected++;
   });
 			
 			 // Scale the range of the data
@@ -106,18 +120,21 @@ let mySelf = this;
   
   
   
-
-  // Add the valueline path.
+// Add the valueline path.
   g.append("path")
       .data([tripsWithCount])
       .attr("class", "line")
       .attr("d", valueline);
+	  
+ 
+		 
 
   // Add the X Axis
   g.append("g")
       .attr("class", "axis")
       .attr("transform", "translate(0," + mySelf.svgHeight  + ")")
       .call(d3.axisBottom(x)
+				.ticks((tripsCountSelected<=31)?(tripsCountSelected-1): 20)
               .tickFormat(d3.timeFormat("%m-%d-%Y")))
       .selectAll("text")	
         .style("text-anchor", "end")
@@ -129,15 +146,23 @@ let mySelf = this;
  g.append("g")
       .attr("class", "axis")
 	 // .attr("transform", "translate(" +mySelf.svgWidth  + ",0)")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y)
+	 .ticks(d3.max(tripsWithCount, function(d) { return d.value; })).tickFormat(d3.format("d")))
+	  .append("text")
+        .attr("class", "axis-title")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Trips Count");
 
 			
-			
+		// Add X GridLines	
 			 g.append("g")			
       .attr("class", "grid")
       .attr("transform", "translate(0," + mySelf.svgHeight + ")")
       .call(d3.axisBottom(x)
-        //.ticks(5)
+        .ticks((tripsCountSelected<=31)?(tripsCountSelected-1): 20)
           .tickSize(-mySelf.svgHeight)
           .tickFormat("")
       );
@@ -151,6 +176,21 @@ let mySelf = this;
           .tickSize(-mySelf.svgWidth)
           .tickFormat("")
       );
+	  
+	  
+	 g.selectAll("circle")
+    .data(tripsWithCount)
+  .enter().append("circle")
+  .classed('testCircle',true)
+    .attr("r", 5)
+	 .attr("cx", function(d) { return x(d.key);})
+	  .attr("cy", function(d) { return y(d.value); })
+    .style("fill","none")
+    .style("stroke","none")
+    .style("pointer-events","all")
+  .append("title")
+    .text(function(d) { return "Day: " + (d.key.getMonth()+1) +"-"+ d.key.getDate() +"-"+ d.key.getFullYear() + " ,Value: " + d.value; });
+	
 			
 			
 			
@@ -166,11 +206,9 @@ let mySelf = this;
 	
 	
 	
-	
 }
 	
-	
-	
+	 
 /////////////////////////////////////////////Hours Line Chart//////////////////////////////////////
 
 
@@ -195,7 +233,7 @@ let mySelf = this;
 					}
 			  });
 			 
-			 console.log(neededDaysData);
+			// console.log(neededDaysData);
 		if(neededDaysData == null ) return true;
 		
 		
@@ -212,7 +250,7 @@ let mySelf = this;
 		
 		
 		 
-			 console.log(tripsHoursWithCount);
+			// console.log(tripsHoursWithCount);
 		if(tripsHoursWithCount == null)
 			return true;
 	
@@ -227,21 +265,15 @@ let mySelf = this;
 	 
 	
     // Set the dimensions of the canvas / graph
-let margin = {top: 30, right: 20, bottom: 70, left: 50},
-    width = 850 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+let margin = mySelf.marginHoursChart,
+    width = mySelf.widthHoursLineChart,
+    height = mySelf.heightHoursLineChart;
 
 
 // Adds the svg canvas
-let svg = d3.select("body")
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform", 
-              "translate(" + margin.left + "," + margin.top + ")");
+let svg = mySelf.svgHoursLineChart;
 			  
-//let rectLegend = svg.append("rect").classed("legend-box",true)
+
 			  
 // Set the ranges
 let x = d3.scaleLinear().range([0, width]).nice(); //d3.scaleBand().rangeRound([0, width]).paddingInner(1);// 
@@ -267,7 +299,13 @@ let priceline = d3.line()
         .ticks(24)
           .tickSize(-height)
           .tickFormat("")
-      );
+      ).append("text")
+        .attr("class", "axis-title")
+        .attr("transform", "rotate(0) translate("+ (width)+",15)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("hours");
 	  
 	  
 	   // add the Y gridlines
@@ -277,7 +315,15 @@ let priceline = d3.line()
         .ticks(d3.max(tripsHoursWithCount, function(d) { return d.value + 1; }))
           .tickSize(-width)
           .tickFormat("")
-      );
+      )
+	   .append("text")
+        .attr("class", "axis-title")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Trips Count");
+	  
 	  
 	
 	 // Nest the entries by symbol
@@ -316,16 +362,6 @@ let priceline = d3.line()
             .attr("d", priceline(d.values));
 			
 			
-	
-
-        // Add the Legend
-      //  svg.append("text")
-      //      .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-      //      .attr("y", height + (margin.bottom/2)+ 5)
-      //      .attr("class", "legend")    // style the legend
-      //      .style("fill", function() { // Add the colours dynamically
-        //        return d.color = color(d.key); })
-        //    .text(d.key); 
 			
 			let legendRectSize = 18;
 			let legendSpacing = 8;
@@ -358,11 +394,26 @@ let priceline = d3.line()
   .attr('y', legendRectSize - legendSpacing)
   .text(function() { return d.key; });
   
+  
+  
 		
 
     });
 
 
+	
+   svg.selectAll("circle")
+    .data(tripsHoursWithCount)
+  .enter().append("circle")
+  .classed('testCircle',true)
+    .attr("r", 5)
+	 .attr("cx", function(d) { return x(d.key);})
+	  .attr("cy", function(d) { return y(d.value); })
+    .style("fill","none")
+    .style("stroke","none")
+    .style("pointer-events","all")
+  .append("title")
+    .text(function(d) { return "Day:" + d.day+", Hour: " + d.key+ " , Value: " + d.value; });
 	
   
   
