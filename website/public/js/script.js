@@ -16,13 +16,15 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
 
         styles: [
             {stylers: [{saturation: -100}]},
-            {"featureType": "road.highway", elementType: "labels", stylers: [{visibility: "off"}]}, //turns off highway labels
-            {"featureType": "road.arterial", elementType: "labels", stylers: [{visibility: "off"}]}, //turns off arterial roads labels
-            {"featureType": "road.local", elementType: "labels", stylers: [{visibility: "off"}]},  //turns off local roads labels
-            {"featureType": "poi", elementType: "labels", stylers: [{visibility: "off"}]}, //turns off highway labels
-            {"featureType": "landscape", elementType: "labels", stylers: [{visibility: "off"}]} //turns off highway labels
+            {"featureType": "road.highway",elementType: "labels",stylers:[{visibility: "off"}]}, //turns off highway labels
+            {"featureType": "road.arterial",elementType: "labels",stylers: [{visibility: "off"}]}, //turns off arterial roads labels
+            {"featureType": "road.local",elementType: "labels",stylers: [{visibility: "off"}]},  //turns off local roads labels
+            {"featureType": "poi",elementType: "labels",stylers:[{visibility: "off"}]}, //turns off highway labels
+            {"featureType": "landscape",elementType: "labels",stylers:[{visibility: "off"}]} //turns off highway labels
         ]
     });
+
+
 
 
     if (error) throw error;
@@ -30,13 +32,13 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
     var overlay = new google.maps.OverlayView();
 
     // Add the container when the overlay is added to the map.
-    overlay.onAdd = function () {
+    overlay.onAdd = function() {
         var layer = d3.select(this.getPanes().overlayLayer).append("div")
             .attr("class", "stations");
 
         // Draw each marker as a separate SVG element.
         // We could use a single SVG, but what size would it have?
-        overlay.draw = function () {
+        overlay.draw = function() {
             var projection = this.getProjection(),
                 padding = 10;
 
@@ -47,7 +49,7 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
                 .style("opacity", 0);
 
 
-            var marker = layer.selectAll("svg")
+            var  marker = layer.selectAll("svg")
                 .data(d3.entries(data))
                 // .each(transform) // update existing markers
                 .enter().append("svg")
@@ -59,6 +61,24 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
                 .attr("r", 4.5)
                 .attr("cx", padding)
                 .attr("cy", padding);
+
+            // Add a label.
+            //marker.append("text")
+            //.attr("x", padding + 7)
+            // .attr("y", padding)
+            //  .attr("dy", ".31em")
+            // .text(function(d) { return d.key; });
+
+            //	 marker.on("mouseover", function(d){
+
+            //		  div.transition()
+            //           .duration(200)
+            //          .style("opacity", .9);
+            //     div.html(d.value.station_name)
+            //        .style("left", (d3.event.pageX) + "px")
+            //       .style("top", (d3.event.pageY - 28) + "px");
+
+            //	 });
 
             function transform(d) {
                 //  let dataVal = d;
@@ -72,18 +92,21 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
                     .attr("x", padding + 7)
                     .attr("y", padding)
                     .attr("dy", ".31em")
-                    .text(function (d) {
-                        return d.value.station_name;
-                    });
+                    .text(function(d) { return d.value.station_name; });
 
 
             }
         };
-
-        // Bind our overlay to the map…
-        overlay.setMap(map);
-
     };
+
+    // Bind our overlay to the map…
+    overlay.setMap(map);
+
+
+
+
+
+
 });
 
 /* End of Lama's work */
