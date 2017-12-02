@@ -4,12 +4,12 @@
      	
 		/* Lama's work */
 		d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
+
 			let lineChart = new LineChart(null);
             let circleChart = new CircleChart(data, lineChart);
             let selectionChart = new SelectionChart(circleChart);
             let timeChart = new TimeChart(selectionChart,lineChart);
-			
-		   
+
 		 //  console.log(data);
            let map = new google.maps.Map(d3.select("#map").node(), {
  // zoom: 8,

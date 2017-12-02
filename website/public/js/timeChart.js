@@ -176,7 +176,6 @@ class TimeChart {
             })
             .attr("y",this.svgHeight-5)
             .classed("timeBarText", true);
-
         let hourtexts = this.hoursvg.selectAll("text").data(hours);
         hourtexts = hourtexts.enter().append("text").merge(hourtexts);
         hourtexts.exit().remove();

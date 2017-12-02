@@ -13,7 +13,13 @@
     <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDpLu5a6HoKhu-pZe-Mf0CgRndrjgNCI8E"></script>
-	
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["calendar"]});
+       // google.charts.setOnLoadCallback(drawChart);
+     </script>
+
 </head>
 
 <body>
@@ -26,6 +32,8 @@
     <span id = "time-bars" class = "content"></span>
     <span id = "update-button" class = "sideBar"></span>
 </div>
+
+ <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
 
 <!--<div id = "selection-chart" class = "view">-->
     <!--<h3>Time selection is: </h3>-->
@@ -49,8 +57,8 @@
 <script type="application/javascript" src="public/js/timeChart.js"></script>
 <script type="application/javascript" src="public/js/selectionChart.js"></script>
 <script type="application/javascript" src="public/js/circleChart.js"></script>
-<script type="application/javascript" src="public/js/script.js">
+<script type="application/javascript" src="public/js/script.js"></script>
+<script type="application/javascript" src="public/js/calendarChart.js"></script>
 
-</script>
 </body>
 </html>

@@ -52,6 +52,7 @@ class SelectionChart {
             console.log(to);
 
             // FILTERING DATA BASED ON DATE RANGE
+
             let bikeDataFiltered =[];
             bikeData.forEach(function (d) {
                 let parsedDate = parser(d['starttime']);
@@ -75,3 +76,4 @@ class SelectionChart {
         });
     };
 }
+
