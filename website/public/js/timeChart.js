@@ -4,9 +4,11 @@ class TimeChart {
     /**
      * Initializes the svg elements required for this chart;
      */
-    constructor(selectionChart,lineChart){
-		let lineChrt = lineChart;
+
+    constructor(selectionChart, lineChart, calendarChart){
         this.selectionChart = selectionChart;
+        this.calendarChart = calendarChart;
+        this.lineChart = lineChart;
         let that = this;
 
         this.margin = {top: 30, right: 20, bottom: 30, left: 50};
@@ -231,7 +233,9 @@ class TimeChart {
         this.hoursvg.append("g").attr("class", "brush").call(hourbrush);
 
         this.buttonsvg.on("click",function(){
-          that.selectionChart.update(that.selection);
+            that.selectionChart.update(that.selection);
+            let dates = "TEST DATA";
+            that.calendarChart.update(that.selection);
         });
     }
 
