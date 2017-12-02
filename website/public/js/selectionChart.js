@@ -19,23 +19,17 @@ class SelectionChart {
         let that = this;
 
         //Update the visualization on brush events over the Circle chart
-        d3.csv("data/BostonMA.csv", function (error, bikeData) {
+        d3.csv("data/bostonDummySet.csv", function (error, bikeData) {
             console.log(bikeData);
 
-            let selectedMonths = selectedTime['selectedMonths'];
-            let selectedDays = selectedTime['selectedDays'];
-            let selectedHours = selectedTime['selectedHours'];
-
-            console.log(selectedMonths);
-            console.log(selectedDays);
-            console.log(selectedHours);
-
-            let startMonth =selectedMonths[0];
-            let endMonth = selectedMonths[(selectedMonths.length)-1];
-            let startDay =selectedDays[0];
-            let endDay = selectedDays[(selectedDays.length)-1];
-            let startHour = selectedHours[0];
-            let endHour = selectedHours[(selectedHours.length)-2];
+            let startMonth = selectedTime['start']['month'];
+            let endMonth = selectedTime['end']['month'];
+            let startDay =selectedTime['start']['day'];
+            let endDay = selectedTime['end']['day'];
+            let startHour = selectedTime['start']['hour'];
+            let endHour = selectedTime['end']['hour'];
+            let startMinute = selectedTime['start']['minute'];
+            let endMinute = selectedTime['end']['minute'];
 
             //console.log(startMonth);
             //console.log(endMonth);
@@ -43,10 +37,22 @@ class SelectionChart {
             //console.log(endDay);
             //console.log(startHour);
             //console.log(endHour);
+            //console.log(startMinute);
+            //console.log(endMinute);
 
             let parser = d3.timeParse("%m/%d/%Y %H:%M");
 
+            let dateFrom = startDay  +"/" + startMonth + "/2016"+ "/" + startHour + "/" + startMinute;
+            let dateTo = endDay +"/" + endMonth +"/2016" + "/" + endHour + "/" + endMinute;
+            let d1 = dateFrom.split("/");
+            let d2 = dateTo.split("/");
+            let from = new Date(d1[2], parseInt(d1[1])-1, d1[0], d1[3], d1[4]);  // -1 because months are from 0 to 11
+            let to   = new Date(d2[2], parseInt(d2[1])-1, d2[0], d2[3], d2[4] );
+            console.log(from);
+            console.log(to);
+
             // FILTERING DATA BASED ON DATE RANGE
+
             let bikeDataFiltered =[];
             bikeData.forEach(function (d) {
                 let parsedDate = parser(d['starttime']);
@@ -54,21 +60,20 @@ class SelectionChart {
                 let month = parsedDate.getMonth() + 1;  //0-11
                 let day = parsedDate.getDate();  //1-31
                 let hour = parsedDate.getHours(); //0-23
-                //console.log(month);
-                //console.log(day);
-                //console.log(hour);
+                let minute = parsedDate.getMinutes(); //0-59
 
-                if ((month >= startMonth && month <=endMonth) && (day >= startDay && day <= endDay) && (hour >= startHour && hour < endHour)) {
+                let dateCheck = day +"/" + month +"/2016" + "/" + hour + "/" + minute;
+                let c = dateCheck.split("/");
+                let check = new Date(c[2], parseInt(c[1])-1, c[0], c[3], c[4]);
+                //console.log(check);
+
+                if(check >= from && check <= to){
                     bikeDataFiltered.push(d);
                 }
             });
-
-
             console.log(bikeDataFiltered);
             that.circleChart.update(bikeDataFiltered);
         });
-
     };
-
-
 }
+
