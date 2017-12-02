@@ -6,20 +6,47 @@ class CalendarChart{
         this.week = d3.timeFormat("%U");
         this.percent = d3.format(".1%");
         this.format = d3.timeFormat("%Y-%m-%d");
-        this.format2 = d3.timeFormat("%d-%m-%Y");
+        this.format2 = d3.timeFormat("%d/%m/%Y");
         this.tformat = d3.timeFormat("%H:%M:%S");
         this.year = '2016';
+
+        this.colors = ['rgb(226,247,207)', 'rgb(202,255,183)', 'rgb(186,228,179)', 'rgb(116,196,118)','rgb(35,139,69)' ];
 
         this.margin = { top: 20, right: 25, bottom: 20, left: 15 };
         this.width = 960 - this.margin.left - this.margin.right;
         this.height = 136 - this.margin.top - this.margin.bottom;
         this.cellSize = 15;
+
+        this.aggregatedData=[];
+        let that =this;
+        // Reading Aggregated data day wise trips
+        d3.csv("data/AggregatedByDay.csv", function (error, aggregatedData) {
+            that.aggregatedData = aggregatedData;
+        });
+
     };
 
     update(selectedTime){
         console.log(selectedTime);
         let that = this;
         let chosenDates=[];
+
+        // Aggregated data day wise trips
+        console.log(this.aggregatedData);
+        // let a = this.aggregatedData.sort(function(a,b){
+        //     return d3.ascending(a['trip_counts'],b['trip_counts'])
+        // });
+        // console.log(a);
+
+        let max = d3.max( that.aggregatedData, d=> +d['trip_counts']);
+        console.log(max);
+        let min = d3.min( that.aggregatedData, d=> +d['trip_counts']);
+        console.log(min);
+
+        let colorScale = d3.scaleQuantize()
+            .domain([min, max])
+            .range(that.colors);
+
 
         let startMonth = selectedTime['start']['month'];
         let endMonth = selectedTime['end']['month'];
@@ -136,15 +163,29 @@ class CalendarChart{
 
         let rectFiltered = rect.filter(function (d) {
                                 //console.log(d);
-                                let c = d.split("-");
+                                let c = d.split("/");
                                 let checkDate = new Date(c[2], parseInt(c[1])-1, c[0]);
                                 if(checkDate >= fromDate && checkDate <= toDate){
                                     return d;
                                 }
                             });
 
-        rectFiltered.attr("class","daySelected")
-                    .transition().duration(1500);
+        rectFiltered
+                    .transition().duration(1500)
+                    .style("fill",function (d) {
+                        let dayNo = d3.timeFormat("%j");
+                        let c = d.split("/");
+                        let checkDate = new Date(c[2], parseInt(c[1])-1, c[0]);
+                        //console.log(d);
+
+                        // Gives the dayNumber which can be used to get the data from the Aggregated data set
+                        let dayNumber = dayNo(checkDate);
+                        //console.log(dayNumber);
+                        //console.log(that.aggregatedData[dayNumber-1]['trip_counts']);
+                        return colorScale(that.aggregatedData[dayNumber-1]['trip_counts']);
+
+                    })
+                    .attr("class","daySelected");
                    // .style("fill", "#FAF23A");
 
 
