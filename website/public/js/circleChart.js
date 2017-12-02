@@ -5,7 +5,8 @@ class CircleChart {
      * Initializes the svg elements required to lay the tiles
      * and to populate the legend.
      */
-    constructor(data){
+    constructor(data, lineChart){
+        this.lineChart = lineChart;
         console.log(data);
         this.stationData = data;
         let divCircles = d3.select("#circle-chart-content").classed("content", true);
@@ -19,14 +20,16 @@ class CircleChart {
         let legend = d3.select("#legend").classed("content",true);
 
         //creates svg elements within the div
-        this.legendSvg = legend.append("svg")
+        this.legendSvg = legend.select("legendSvg");
+        this.legendSvg
             .attr("width",this.svgWidth)
             .attr("height",legendHeight)
             .attr("transform", "translate(" + this.margin.left + ",0)")
-        this.svg = divCircles.append("svg")
-            .attr("width",this.svgWidth)
-            .attr("height",this.svgHeight)
-            .attr("transform", "translate(" + this.margin.left + ",0)")
+        this.svg = divCircles.select("#circleSvg");
+        this.svg
+            .attr("width",1000)
+            .attr("height",1000)
+            .attr("transform", "translate(" + this.margin.left + ",0)");
     };
 
 
@@ -37,7 +40,8 @@ class CircleChart {
     //  * @return text HTML content for tool tip
     //  */
     tooltip_render(tooltip_data) {
-        let text = "<h2 class ='count' > Total: " + tooltip_data.count + "</h2>";
+        let text = "<h2 class ='count' > Total: " + tooltip_data.count + "</h2><h2>Click to see detailed visualization!</h2>";
+
         console.log("in tooltip")
         return text;
     }
@@ -190,16 +194,8 @@ class CircleChart {
         }
         console.log(topstations);
 
+        // this.circleLoadingG.attr("opacity",0);
 
-        // cityBikeInfo.forEach(function(v){
-        //    for(let i = 0 ; i < edges.length; ++i){
-        //        if((edges[i]['station1']['station_id'] === v['start station id'] && edges[i]['station2']['station_id'] === v['end station id']) ||
-        //            (edges[i]['station2']['station_id'] === v['start station id'] && edges[i]['station1']['station_id'] === v['end station id'])){
-        //            edges[i]['total']++;
-        //        }
-        //    }
-        // });
-        // console.log(edges);
         let linegroups = this.svg.selectAll("g .linegroup").data(pairs);
         linegroups.exit().remove();
         linegroups = linegroups.enter().append("g").merge(linegroups);
@@ -252,7 +248,8 @@ class CircleChart {
         //
         // this.legendSvg.select(".legendQuantile")
         //     .call(legendQuantile);
-        //
+
+
         // //for reference:https://github.com/Caged/d3-tip
         // //Use this tool tip element to handle any hover over the chart
         let tip = d3.tip().attr('class', 'd3-tip')
@@ -261,27 +258,30 @@ class CircleChart {
                 return [0,0];
             })
             .html((d)=>{
-                /* populate data in the following format */
-                // let tooltip_data = {
-                //     "state": d['State'],
-                //     "winner":d['State_Winner'],
-                //     "electoralVotes" : d['Total_EV'],
-                //     "result":[
-                //         {"nominee": d['D_Nominee_prop'],"votecount": d['D_Votes'],"percentage": d['D_Percentage'],"party":"D"} ,
-                //         {"nominee": d['R_Nominee_prop'],"votecount": d['R_Votes'],"percentage": d['R_Percentage'],"party":"R"} ,
-                //         {"nominee": d['I_Nominee_prop'],"votecount": d['I_Votes'],"percentage": d['I_Percentage'],"party":"I"}
-                //     ]
-                // };
-                //* pass this as an argument to the tooltip_render function then,
                 // return the HTML content returned from that method.
                 let tooltip_data = { "count": d['total']};
                 return that.tooltip_render(tooltip_data);
-                // return;
             });
         this.svg.call(tip);
         linegroups.on('mouseover', tip.show)
             .on('mouseout', tip.hide);
+        linegroups.on('click', function(d){
+
+            console.log(d);
+            let selectedStationsData=[];
+            selectedStationsData.push(d['station1']['station_id']);//("67");
+            selectedStationsData.push(d['station2']['station_id']);//("22");
+            //passing the Start date by day and month
+            selectedStationsData.push(cityBikeInfo[0]['starttime']);
+            selectedStationsData.push(cityBikeInfo[cityBikeInfo.length-1]['starttime']);  //This is the end date
+
+            that.lineChart.update(selectedStationsData);
+
+            // let selectedDays=[];
+            // selectedDays.push("01/01/2016");
+            // selectedDays.push("09/15/2016");
+            // selectedDays.push("07/01/2016");
+            // that.lineChart.updateHoursLineChart(selectedDays,selectedStationsData[0],selectedStationsData[1]);
+        });
     };
-
-
 }
