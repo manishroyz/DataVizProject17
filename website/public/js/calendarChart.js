@@ -10,7 +10,8 @@ class CalendarChart{
         this.tformat = d3.timeFormat("%H:%M:%S");
         this.year = '2016';
 
-        this.colors = ['rgb(226,247,207)', 'rgb(202,255,183)', 'rgb(186,228,179)', 'rgb(116,196,118)','rgb(35,139,69)' ];
+        //this.colors = ['rgb(226,247,207)', 'rgb(202,255,183)', 'rgb(186,228,179)', 'rgb(116,196,118)','rgb(35,139,69)' ];
+        this.colors = ['rgb(232,246,243)', 'rgb(162,217,206)', 'rgb(115,198,182)', 'rgb(22,160,133)','rgb(17,122,101)' ];
 
         this.margin = { top: 20, right: 25, bottom: 20, left: 15 };
         this.width = 960 - this.margin.left - this.margin.right;
@@ -38,14 +39,19 @@ class CalendarChart{
         // });
         // console.log(a);
 
-        let max = d3.max( that.aggregatedData, d=> +d['trip_counts']);
+        let max = '7000';
+            //d3.max( that.aggregatedData, d=> +d['trip_counts']);
         console.log(max);
-        let min = d3.min( that.aggregatedData, d=> +d['trip_counts']);
+        let min = '0';
+        //d3.min( that.aggregatedData, d=> +d['trip_counts']);
         console.log(min);
 
         let colorScale = d3.scaleQuantize()
             .domain([min, max])
             .range(that.colors);
+
+        let catdata = [0,1400,2800,4200,5600];
+        let catd = catdata[1] - catdata[0]-1;
 
 
         let startMonth = selectedTime['start']['month'];
@@ -188,6 +194,27 @@ class CalendarChart{
                     .attr("class","daySelected");
                    // .style("fill", "#FAF23A");
 
+        //Legend for heatmap calender
+        let legend = svg_divCalendar.selectAll(".legend")
+            .data(catdata)
+            .enter().append("g")
+            .attr("class", "legend");
+
+        legend.append("rect")
+            .attr("x", that.width-100)
+            .attr("y", function(d, i) { return that.cellSize * i; })
+            .attr("width", that.cellSize)
+            .attr("height", that.cellSize)
+            .style("fill", function(d, i) { return that.colors[i]; })
+            .style("stroke", "#000");
+
+
+        legend.append("text")
+            .text(function(d,i) {
+                return i*1400 + " - " + (i+1)*1400;
+            })
+            .attr("y", function(d, i) { return that.cellSize * (i+0.8); })
+            .attr("x", that.width-100 + that.cellSize + 5);
 
 
 
