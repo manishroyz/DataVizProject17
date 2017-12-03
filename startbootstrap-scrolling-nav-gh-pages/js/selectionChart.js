@@ -74,7 +74,7 @@ class SelectionChart {
                 }
             });
             console.log(bikeDataFiltered);
-            that.circleChart.update(bikeDataFiltered);
+            // that.circleChart.update(bikeDataFiltered);
 
     };
 }
