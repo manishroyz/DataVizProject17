@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Boston Bike Share Analysis</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/scrolling-nav.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/calendar.css"/>
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+    <!-- <script type="text/javascript" src="bower_components/d3/d3.js"></script> -->
+    <script type="text/javascript" src="bower_components/d3-tip/index.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDpLu5a6HoKhu-pZe-Mf0CgRndrjgNCI8E"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["calendar"]});
+    </script>
+
+    <script type="application/javascript" src="js/lineChart.js"></script>
+    <script type="application/javascript" src="js/timeChart.js"></script>
+    <script type="application/javascript" src="js/selectionChart.js"></script>
+    <script type="application/javascript" src="js/circleChart.js"></script>
+    <script type="application/javascript" src="js/script.js"></script>
+    <script type="application/javascript" src="js/calendarChart.js"></script>
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Boston Bike Share Analysis</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger lead" href="#bigpictureSection">Big Picture</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger lead" href="#mapSection">Map</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger lead" href="#exploreSection">Explore</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-primary text-white">
+      <div class="container text-center">
+        <h1>Boston Bike Share Analysis</h1>
+        <p class="lead">We analyze commuter bike data for the city of Boston for the year 2016, and allow for exploration of the data.</p>
+      </div>
+    </header>
+
+
+    <section id="bigpictureSection" class="bg-light">
+      <div class="container">
+        <div class="row>">
+          <div class="col-lg-12 mx-auto">
+            <h2 style="">The Big Picture</h2>
+            <p class="lead">The visualization here shows data around the year: how many bike commutes are made each day in Boston. The way Boston bikers commute closely mirrors an inverse relationship with the weather patterns.
+              As is evident from the graph, the frequency starts ascending as the weather gets warmer with the arrival of Spring. Similarly, it starts descending as the temperature dips with the approaching winter season.
+              We can see periodic dips on most weekends, which gets more pronounced during the warmer months as the reference trips in the adjoining days is large.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 mx-auto">
+            <img src="data/LINE.PNG" alt="Year-round Data">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="mapSection">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8" id="map" style="height: 500px">
+          </div>
+          <!-- /.col-lg-8 -->
+          <div class="col-lg-4">
+            <h1>Stations in Boston</h1>
+            <p class="lead">The map here shows the bike share stations in the Boston Metro region.</p>
+            <a class="btn btn-primary btn-lg" href="#exploreSection">Find out More!</a>
+          </div>
+          <!-- /.col-md-4 -->
+        </div>
+      </div>
+    </section>
+
+    <section id="exploreSection">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 mx-auto"><h1 style="display: inline;">Explore. &nbsp</h1>
+            <p style="display: inline;" class="lead">Make a brush selection in the time bars below and click the button to explore bike share use in Boston! Please wait for a minute after pressing the button, the data filtering takes time!<br/><br/></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <span id = "time-bars" class="content"></span>
+          </div>
+          <div class="col-lg-2 mx-auto">
+            <a class="btn btn-primary btn-lg" id="updateButton" style="font-size: 0.95rem;" href="#exploreSection">Filter by Time</a>
+          </div>
+        </div>
+        <div class="row visrow" style="visibility: hidden">
+          <div class="col-lg-10 mx-auto" id="divCalendar">
+          </div>
+          <div class="col-lg-2 mx-auto">
+            <h6><br/>Select days in the calendar chart to view hour-by-hour line chart visualizations!</h6>>
+          </div>
+        </div>
+        <div class="row visrow" style="visibility: hidden">
+          <div class="col-lg-4 mx-auto" id="line-chart">
+            <h6><br/>Click on an edge in the circle chart to view line chart for a pair of stations!</h6>
+          </div>
+          <div class="col-lg-4 mx-auto" id="circle-chart-content" >
+            <h6 style="text-align: center">Overview of top stations in the selection</h6>
+            <svg id="circleSvg">
+            </svg>
+          </div>
+          <div class="col-lg-4 mx-auto" id="hours-line-chart">
+            <h6><br/>Select some dates on the calendar to view hour-by-hour information here!</h6>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">This work here has been produced as part of a project for the course Visualization for Data Science in Fall 2017.<br/> P.S. WE LOVE ALEX</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="js/scrolling-nav.js"></script>
+
+  </body>
+
+</html>
