@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Boston Bike Share Analysis</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/scrolling-nav.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/calendar.css"/>
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+    <!-- <script type="text/javascript" src="bower_components/d3/d3.js"></script> -->
+    <script type="text/javascript" src="bower_components/d3-tip/index.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDpLu5a6HoKhu-pZe-Mf0CgRndrjgNCI8E"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["calendar"]});
+    </script>
+
+    <script type="application/javascript" src="js/lineChart.js"></script>
+    <script type="application/javascript" src="js/timeChart.js"></script>
+    <script type="application/javascript" src="js/selectionChart.js"></script>
+    <!--<script type="application/javascript" src="js/circleChart.js"></script>-->
+    <script type="application/javascript" src="js/script.js"></script>
+    <script type="application/javascript" src="js/calendarChart.js"></script>
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Boston Bike Share Analysis</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#mapSection">Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#bigpictureSection">Big Picture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#exploreSection">Explore</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-primary text-white">
+      <div class="container text-center">
+        <h1>Boston Bike Share Analysis</h1>
+        <p class="lead">We analyze commuter bike data for the city of Boston for the year 2016, and allow for exploration of the data.</p>
+      </div>
+    </header>
+
+    <section id="mapSection">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8" id="map" style="height: 500px">
+          </div>
+          <!-- /.col-lg-8 -->
+          <div class="col-lg-4">
+            <h1>Stations in Boston</h1>
+            <p>The map here shows the bike share stations in the Boston Metro region.</p>
+            <a class="btn btn-primary btn-lg" href="#exploreSection">Find out More!</a>
+          </div>
+          <!-- /.col-md-4 -->
+        </div>
+      </div>
+    </section>
+
+    <section id="bigpictureSection" class="bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2>Services we offer</h2>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut optio velit inventore, expedita quo laboriosam possimus ea consequatur vitae, doloribus consequuntur ex. Nemo assumenda laborum vel, labore ut velit dignissimos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="exploreSection">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <span id = "time-bars" class="content"></span>
+          </div>
+          <div class="col-lg-2 mx-auto">
+            <a class="btn btn-primary btn-lg" id="updateButton" style="font-size: 0.95rem;" href="#exploreSection">Filter by Time</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">This work here has been produced as part of a project for the course Visualization for Data Science in Fall 2017.<br/> P.S. WE LOVE ALEX</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="js/scrolling-nav.js"></script>
+
+  </body>
+
+</html>

@@ -1,0 +1,89 @@
+
+body {
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+}
+
+.leftcolumn {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 249px;
+    padding: 5px;
+    margin: 5px;
+    vertical-align: top;
+}
+
+.rightcolumn {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 700px;
+    padding: 5px;
+    margin: 5px;
+    text-align:center;
+    vertical-align: top;
+}
+
+.map {
+    background: url("map_240_195.png");
+}
+
+.dot {
+    stroke: #000;
+}
+
+.day {
+    fill: #FDFCDE;
+    stroke: #ccc;
+}
+
+.daySelected {
+    fill: #FAF23A;
+    stroke: #ccc;
+}
+.daySelectedChosen {
+    fill: #c03;
+    stroke: #ccc;
+    /*stroke: #c03;*/
+    /*stroke-width:3px;*/
+}
+
+.hour {
+    fill: #808080;
+    stroke: #ccc;
+    hover: #fd8d3c;
+}
+
+.month {
+    border-radius: 25px;
+    fill: none;
+    stroke: #9E9A53;
+    stroke-width: 2px;
+}
+
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+
+.lineline {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.selected {
+    stroke: #fd8d3c;
+    stroke-width:3px;
+}
+
+.displayed {
+    fill: none;
+    stroke: #fd8d3c;
+    stroke-width:3px;
+}
+
+.highlight {stroke: #c03; stroke-width:3px;}
