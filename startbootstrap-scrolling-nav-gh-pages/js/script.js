@@ -2,12 +2,12 @@
 /* Lama's work */
 d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
     d3.csv("data/bostonDummySet.csv", function (error, bikeData) {
-        let calendarChart = new CalendarChart(null);
+
         // let mainLineChart = new LineChart(null);
         let lineChart = new LineChart(null);
-        let circleChart = null;
-        // let circleChart = new CircleChart(data, lineChart);
-        let selectionChart = new SelectionChart(circleChart, bikeData);
+        let calendarChart = new CalendarChart(null, lineChart);
+        let circleChart = new CircleChart(data, lineChart);
+        let selectionChart = new SelectionChart(circleChart, calendarChart, bikeData);
         let timeChart = new TimeChart(selectionChart, lineChart, calendarChart);
     });
 

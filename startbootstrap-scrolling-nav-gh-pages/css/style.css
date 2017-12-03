@@ -144,7 +144,7 @@ html, body {
 }
 
 .linegroup line{
-    stroke:darkGrey;
+    stroke: lightblue;
 }
 
 #time-chart {
@@ -154,14 +154,14 @@ html, body {
 }
 
 .circles {
-    fill: green;
-    stroke: black;
+    fill: #D7FF4C;
+    stroke: green;
     stroke-width: 1.5px;
 }
 
 .circleText {
     text-anchor: middle;
-    font-size: 24px;
+    font-size: 10px;
 }
 body {
     font-family: Lato;

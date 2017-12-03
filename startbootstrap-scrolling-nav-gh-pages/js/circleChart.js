@@ -15,21 +15,21 @@ class CircleChart {
         let svgBounds = divCircles.node().getBoundingClientRect();
         this.svgWidth = svgBounds.width - this.margin.left - this.margin.right;
         this.svgHeight = this.svgWidth/2;
-        let legendHeight = 150;
-        //add the svg to the div
-        let legend = d3.select("#legend").classed("content",true);
-
-        //creates svg elements within the div
-        this.legendSvg = legend.select("legendSvg");
-        this.legendSvg
-            .attr("width",this.svgWidth)
-            .attr("height",legendHeight)
-            .attr("transform", "translate(" + this.margin.left + ",0)")
+        // let legendHeight = 150;
+        // //add the svg to the div
+        // let legend = d3.select("#legend").classed("content",true);
+        //
+        // //creates svg elements within the div
+        // this.legendSvg = legend.select("legendSvg");
+        // this.legendSvg
+        //     .attr("width",this.svgWidth)
+        //     .attr("height",legendHeight)
+        //     .attr("transform", "translate(" + this.margin.left + ",0)")
         this.svg = divCircles.select("#circleSvg");
         this.svg
-            .attr("width",1000)
-            .attr("height",1000)
-            .attr("transform", "translate(" + this.margin.left + ",0)");
+            .attr("width",this.svgWidth)
+            .attr("height", 500);
+            // .attr("transform", "translate(" + this.margin.left + ",0)");
     };
 
 
@@ -39,13 +39,17 @@ class CircleChart {
     //  * @param tooltip_data information that needs to be populated in the tool tip
     //  * @return text HTML content for tool tip
     //  */
-    tooltip_render(tooltip_data) {
-        let text = "<h2 class ='count' > Total: " + tooltip_data.count + "</h2><h2>Click to see detailed visualization!</h2>";
+    tooltip_render1(tooltip_data) {
+        let text = "<h4 class ='count' > Total: " + tooltip_data.count + "</h4><h4>Click to see detailed visualization!</h4>";
 
         console.log("in tooltip")
         return text;
     }
 
+    tooltip_render2(tooltip_data) {
+        let text = " <h4 class ='stationName' > Station Name: " + tooltip_data.name;
+        return text;
+    }
     /**
      * Creates circles, edges and tool tip for each edge, legend for encoding the color scale information.
      *
@@ -57,6 +61,7 @@ class CircleChart {
         console.log(cityBikeInfo);
         this.svg.selectAll("*").remove();
         //find out top 7 stations
+        this.cityBikeInfo = cityBikeInfo;
         let stationList =this.stationData;
         let that = this;
         let edges = [];
@@ -113,7 +118,7 @@ class CircleChart {
         }
         console.log(topstations);
         console.log(pairs);
-        let mult = 100;
+        let mult = 30;
         let odd_positions = [
             {
                 'x': mult*5,
@@ -203,7 +208,7 @@ class CircleChart {
 
         let linewidthscale = d3.scaleLinear()
             .domain([d3.min(pairs, p=>p['total']), d3.max(pairs, p=>p['total'])])
-            .range([5, 30]);
+            .range([2, 10]);
 
         linegroups.each(function(d){
             d3.select(this).selectAll('*').remove();
@@ -220,19 +225,36 @@ class CircleChart {
 
         circles.attr("cx", d=> d['x'])
             .attr("cy", d=> d['y'])
-            .attr("r", 30)
+            .attr("r", 10)
             .classed("circles", true);
 
-        this.svg.attr("transform", "translate(600, -300)");
+        this.svg.append("circle").attr("cx", 5*mult)
+            .attr("cy", 5*mult)
+            .attr("r", 3.162)
+            .attr("fill", "none");
 
-        let circle_texts = this.svg.selectAll("text").data(topstations);
-        circle_texts.exit().remove();
-        circle_texts = circle_texts.enter().append("text").merge(circle_texts);
+        this.svg.attr("transform", "translate(0, 0)");
 
-        circle_texts.attr("x", d=> d['x'])
-            .attr("y", d=> d['y']+45)
-            .text(d=> d['station_name'])
-            .classed("circleText", true);
+        // let circle_texts = this.svg.selectAll("text").data(topstations);
+        // circle_texts.exit().remove();
+        // circle_texts = circle_texts.enter().append("text").merge(circle_texts);
+
+        // circle_texts.attr("x", function(d){
+        //     if(d['x']<5*30)
+        //         return d['x']+30;
+        //     else
+        //         return d['x']-30;
+        // })
+        //     .attr("y", function(d,i){
+        //         if(d['x']===5*30)
+        //             return d['y']+16;
+        //         if(d['x']<5*30)
+        //             return d['y']-16;
+        //         else
+        //             return d['y']+13;
+        //     })
+        //     .text(d=> d['station_name'])
+        //     .classed("circleText", true);
 
 
         //Creates a legend element and assigns a scale that needs to be visualized
@@ -260,9 +282,23 @@ class CircleChart {
             .html((d)=>{
                 // return the HTML content returned from that method.
                 let tooltip_data = { "count": d['total']};
-                return that.tooltip_render(tooltip_data);
+                return that.tooltip_render1(tooltip_data);
             });
         this.svg.call(tip);
+        let tip2 = d3.tip().attr('class', 'd3-tip')
+            .direction('se')
+            .offset(function() {
+                return [0,0];
+            })
+            .html((d)=>{
+                // return the HTML content returned from that method.
+                let tooltip_data = { "name": d['station_name']};
+                return that.tooltip_render2(tooltip_data);
+            });
+        this.svg.call(tip2);
+
+        circles.on('mouseover', tip2.show)
+            .on('mouseout', tip2.hide);
         linegroups.on('mouseover', tip.show)
             .on('mouseout', tip.hide);
         linegroups.on('click', function(d){
@@ -275,7 +311,7 @@ class CircleChart {
             selectedStationsData.push(cityBikeInfo[0]['starttime']);
             selectedStationsData.push(cityBikeInfo[cityBikeInfo.length-1]['starttime']);  //This is the end date
 
-            that.lineChart.update(selectedStationsData);
+            that.lineChart.update(selectedStationsData, cityBikeInfo);
 
             // let selectedDays=[];
             // selectedDays.push("01/01/2016");

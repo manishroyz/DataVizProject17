@@ -42,9 +42,9 @@ body {
 }
 .daySelectedChosen {
     fill: #c03;
-    stroke: #ccc;
+    stroke: #c03;
     /*stroke: #c03;*/
-    /*stroke-width:3px;*/
+    stroke-width:3px;
 }
 
 .hour {

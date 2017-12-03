@@ -217,14 +217,8 @@ class TimeChart {
 
         document.getElementById("updateButton").onclick = function(){
             d3.selectAll(".visrow").style("visibility", "visible");
-            console.log("click!");
-            let calTask = async function(){
-                that.calendarChart.update(that.selection);
-            };
-            let circTask = async function(){
-                that.selectionChart.update(that.selection);
-            }
-            calTask().then(circTask());
+            d3.select("#line-chart").select("svg").selectAll("*").remove();
+            that.selectionChart.update(that.selection);
         };
 
     }
