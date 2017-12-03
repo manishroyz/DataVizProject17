@@ -40,7 +40,7 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
  // zoom: 8,
   center: new google.maps.LatLng(42.362648, -71.10006094),
   mapTypeId: google.maps.MapTypeId.Satellite,
-  zoom: 13,
+  zoom: 15,
   
   styles: [
 				{stylers: [{saturation: -100}]},
@@ -77,9 +77,9 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
 		   var tooltip = d3.select("body")
     .append("div")
     .style("position", "absolute")
-    .style("z-index", "10")
+    .style("z-index", "1000")
     .style("visibility", "hidden")
-    .classed("tooltip",true);
+    .classed("tooltipmap",true);
 	
 	
 			
