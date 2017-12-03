@@ -40,7 +40,7 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
  // zoom: 8,
   center: new google.maps.LatLng(42.362648, -71.10006094),
   mapTypeId: google.maps.MapTypeId.Satellite,
-  zoom: 15,
+  zoom: 13,
   
   styles: [
 				{stylers: [{saturation: -100}]},
