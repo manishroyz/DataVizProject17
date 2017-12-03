@@ -13,10 +13,20 @@ class CalendarChart{
         //this.colors = ['rgb(226,247,207)', 'rgb(202,255,183)', 'rgb(186,228,179)', 'rgb(116,196,118)','rgb(35,139,69)' ];
         this.colors = ['rgb(232,246,243)', 'rgb(162,217,206)', 'rgb(115,198,182)', 'rgb(22,160,133)','rgb(17,122,101)' ];
 
-        this.margin = { top: 20, right: 25, bottom: 20, left: 15 };
-        this.width = 960 - this.margin.left - this.margin.right;
+        this.margin = { top: 20, right: 5, bottom: 20, left: 0 };
+
+        let svgBounds = d3.select("#time-bars").node().getBoundingClientRect();
+        this.width = svgBounds.width - this.margin.left - this.margin.right;
         this.height = 136 - this.margin.top - this.margin.bottom;
         this.cellSize = 15;
+
+        // Drawing the outer svg for the calendar
+        this.svg_divCalendar = d3.select("#divCalendar").append("svg")
+            .attr("class", "cal")
+            .attr("width", this.width + this.margin.left + this.margin.right)
+            .attr("height", this.height + this.margin.top + this.margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + 2.5*this.margin.left + "," + this.margin.top + ")");
 
         this.aggregatedData=[];
         let that =this;
@@ -70,17 +80,10 @@ class CalendarChart{
         console.log(fromDate);
         console.log(toDate);
 
-        // Remove svg elements on update
-        d3.selectAll("svg.cal").remove();
-        d3.selectAll("svg.barchart").remove();
+        // // Remove svg elements on update
+        // d3.selectAll("svg.cal").remove();
+        // d3.selectAll("svg.barchart").remove();
 
-        // Drawing the outer svg for the calendar
-        let svg_divCalendar = d3.select("#divCalendar").append("svg")
-            .attr("class", "cal")
-            .attr("width", this.width + this.margin.left + this.margin.right)
-            .attr("height", this.height + this.margin.top + this.margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + 2.5*this.margin.left + "," + this.margin.top + ")");
 
         //Label for calendar months
         let monthlabels = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -89,7 +92,7 @@ class CalendarChart{
 
         // Appending text labels for the months
         for(let i = 0; i < 12; i++){
-            svg_divCalendar.append("text")
+            this.svg_divCalendar.append("text")
                 .attr("transform", "translate(" + that.cellSize*(multipliers[i]+1) + ",-5)rotate(0)")
                 .style("text-anchor", "left")
                 .style("font", "11px sans-serif")
@@ -98,7 +101,7 @@ class CalendarChart{
 
         // Appending text labels for the weeks
         for(let i = 0; i < 7; i++){
-            svg_divCalendar.append("text")
+            this.svg_divCalendar.append("text")
                 .attr("transform", "translate(" + (-18) + ","+ (i+0.4)*16    +")rotate(0)")
                 .style("text-anchor", "left")
                 .style("font", "10px sans-serif")
@@ -106,7 +109,7 @@ class CalendarChart{
         }
 
         // Adding the day boxes
-        let rect = svg_divCalendar.selectAll(".day")
+        let rect = this.svg_divCalendar.selectAll(".day")
             .data(function() {
                 let d = that.year;
                 //console.log(d);
@@ -157,7 +160,7 @@ class CalendarChart{
             });
 
         // heavy line separating the months of the year
-        svg_divCalendar.selectAll(".month")
+        this.svg_divCalendar.selectAll(".month")
             .data(function() {
                 let d= that.year;
                 //console.log(d3.timeMonth.range(new Date(d, 0, 1), new Date(d, 11, 31), 1));
@@ -195,7 +198,7 @@ class CalendarChart{
         // .style("fill", "#FAF23A");
 
         //Legend for heatmap calender
-        let legend = svg_divCalendar.selectAll(".legend")
+        let legend = this.svg_divCalendar.selectAll(".legend")
             .data(catdata)
             .enter().append("g")
             .attr("class", "legend");

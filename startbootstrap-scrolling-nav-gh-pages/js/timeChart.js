@@ -216,6 +216,7 @@ class TimeChart {
         this.hoursvg.append("g").attr("class", "brush").call(hourbrush);
 
         document.getElementById("updateButton").onclick = function(){
+            d3.selectAll(".visrow").style("visibility", "visible");
             console.log("click!");
             let calTask = async function(){
                 that.calendarChart.update(that.selection);
