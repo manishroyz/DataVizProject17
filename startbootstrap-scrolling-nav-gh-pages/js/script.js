@@ -1,7 +1,7 @@
 
 /* Lama's work */
 d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
-
+    let stationData = data;
     let sortedDataSet = [];
     let sortedDataSet1 = [];
     let sortedDataSet2 = [];
@@ -24,16 +24,17 @@ d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
                 console.log(sortedDataSet);
                 bikeData = sortedDataSet;
                 console.log(bikeData);
+
+
+                let lineChart = new LineChart(null);
+                let calendarChart = new CalendarChart(null, lineChart);
+                let circleChart = new CircleChart(stationData, lineChart);
+                let selectionChart = new SelectionChart(circleChart, calendarChart, bikeData);
+                let timeChart = new TimeChart(selectionChart, lineChart, calendarChart);
             });
         });
     });
 
-    console.log('bikeData');
-        let lineChart = new LineChart(null);
-        let calendarChart = new CalendarChart(null, lineChart);
-        let circleChart = new CircleChart(data, lineChart);
-        let selectionChart = new SelectionChart(circleChart, calendarChart, bikeData);
-        let timeChart = new TimeChart(selectionChart, lineChart, calendarChart);
 
     //  console.log(data);
     let map = new google.maps.Map(d3.select("#map").node(), {

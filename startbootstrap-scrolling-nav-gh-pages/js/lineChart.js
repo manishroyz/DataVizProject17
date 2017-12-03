@@ -123,7 +123,7 @@ class LineChart {
                 .attr("class", "axis")
                 .attr("transform", "translate(0," + mySelf.svgHeight  + ")")
                 .call(d3.axisBottom(x)
-                    .ticks((tripsCountSelected<=31)?(tripsCountSelected-1): 20)
+                    .ticks((tripsCountSelected<=20)?(tripsCountSelected-1): 20)
                     .tickFormat(d3.timeFormat("%m-%d-%Y")))
                 .selectAll("text")
                 .style("text-anchor", "end")
@@ -132,11 +132,12 @@ class LineChart {
                 .attr("transform", "rotate(-65)");
 
             // Add the Y Axis
+            let max = (d3.max(tripsWithCount, function(d) { return d.value; }));
             g.append("g")
                 .attr("class", "axis")
                 // .attr("transform", "translate(" +mySelf.svgWidth  + ",0)")
                 .call(d3.axisLeft(y)
-                    .ticks(d3.max(tripsWithCount, function(d) { return d.value; })).tickFormat(d3.format("d")))
+                    .ticks((max<=15)?max:15).tickFormat(d3.format("d")))
                 .append("text")
                 .attr("class", "axis-title")
                 .attr("transform", "rotate(-90)")
@@ -159,7 +160,7 @@ class LineChart {
             g.append("g")
                 .attr("class", "grid")
                 .call(d3.axisLeft(y)
-                    .ticks(d3.max(tripsWithCount, function(d) { return d.value; }))
+                    .ticks((max<=15)?max:15)
                     .tickSize(-mySelf.svgWidth)
                     .tickFormat("")
                 );
