@@ -284,7 +284,7 @@ class LineChart {
         svg.append("g")
             .attr("class", "grid")
             .call(d3.axisLeft(y)
-                .ticks((max>15)?15:max)
+                .ticks(max >15?15: max)
                 .tickSize(-width)
                 .tickFormat("")
             )
@@ -317,11 +317,11 @@ class LineChart {
             .call(d3.axisBottom(x));
 
 
-
+        // let max = d3.max(tripsHoursWithCount, function(d) { return d.value; });
         // Add the Y Axis
         svg.append("g")
             .attr("class", "axis")
-            .call(d3.axisLeft(y).ticks(d3.max(tripsHoursWithCount, function(d) { return d.value; })).tickFormat(d3.format("d")));
+            .call(d3.axisLeft(y).ticks(max >15?15: max).tickFormat(d3.format("d")));
         // Loop through each day
         dataNest.forEach(function(d,i) {
 

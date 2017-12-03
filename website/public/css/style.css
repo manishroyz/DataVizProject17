@@ -47,6 +47,13 @@ html, body, #map {
 
 }
 
+.tooltip{
+    font-size:18px;
+    font-family: "Arial Black";
+	 font-weight:bold;
+
+}
+
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
     /*box-sizing: border-box;*/
