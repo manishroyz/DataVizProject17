@@ -4,8 +4,9 @@ class SelectionChart {
     /**
      * Initializes the svg elements required for this chart;
      */
-    constructor(circleChart, bikeData){
+    constructor(circleChart, calendarChart, bikeData){
         this.circleChart = circleChart;
+        this.calendarChart = calendarChart;
         this.bikeData = bikeData;
         // this.divSelectionChart = d3.select("#selection-chart").classed("sideBar", true);
     };
@@ -74,7 +75,8 @@ class SelectionChart {
                 }
             });
             console.log(bikeDataFiltered);
-            // that.circleChart.update(bikeDataFiltered);
+            that.calendarChart.update(selectedTime, bikeDataFiltered);
+            that.circleChart.update(bikeDataFiltered);
 
     };
 }

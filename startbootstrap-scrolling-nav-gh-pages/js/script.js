@@ -1,22 +1,47 @@
 
 /* Lama's work */
 d3.csv("data/BostonStationsDataSet.csv", function(error, data) {
-    d3.csv("data/bostonDummySet.csv", function (error, bikeData) {
-        let calendarChart = new CalendarChart(null);
-        // let mainLineChart = new LineChart(null);
-        let lineChart = new LineChart(null);
-        let circleChart = null;
-        // let circleChart = new CircleChart(data, lineChart);
-        let selectionChart = new SelectionChart(circleChart, bikeData);
-        let timeChart = new TimeChart(selectionChart, lineChart, calendarChart);
+    let stationData = data;
+    let sortedDataSet = [];
+    let sortedDataSet1 = [];
+    let sortedDataSet2 = [];
+    let sortedDataSet3 = [];
+    let bikeData = [];
+
+    d3.csv("data/part1.csv", function(error, data) {
+        data.forEach(d=>sortedDataSet.push(d));
+        console.log(sortedDataSet);
+        console.log(sortedDataSet.length);
+
+        d3.csv("data/part2.csv", function(error, data) {
+            data.forEach(d=>sortedDataSet.push(d));
+            console.log(sortedDataSet);
+            console.log(sortedDataSet.length);
+
+            d3.csv("data/part3.csv", function(error, data) {
+                data.forEach(d=>sortedDataSet.push(d));
+                console.log(sortedDataSet.length);
+                console.log(sortedDataSet);
+                bikeData = sortedDataSet;
+                console.log(bikeData);
+
+
+                let lineChart = new LineChart(null);
+                let calendarChart = new CalendarChart(null, lineChart);
+                let circleChart = new CircleChart(stationData, lineChart);
+                let selectionChart = new SelectionChart(circleChart, calendarChart, bikeData);
+                let timeChart = new TimeChart(selectionChart, lineChart, calendarChart);
+            });
+        });
     });
+
 
     //  console.log(data);
     let map = new google.maps.Map(d3.select("#map").node(), {
         // zoom: 8,
         center: new google.maps.LatLng(42.362648, -71.10006094),
         mapTypeId: google.maps.MapTypeId.Satellite,
-        zoom: 14,
+        zoom: 16,
 
         styles: [
             {stylers: [{saturation: -100}]},

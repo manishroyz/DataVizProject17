@@ -1,6 +1,6 @@
 class CalendarChart{
 
-    constructor(data){
+    constructor(data, lineChart){
         console.log('in calendar');
         this.day = d3.timeFormat("%w");
         this.week = d3.timeFormat("%U");
@@ -10,6 +10,7 @@ class CalendarChart{
         this.tformat = d3.timeFormat("%H:%M:%S");
         this.year = '2016';
 
+        this.lineChart = lineChart;
         //this.colors = ['rgb(226,247,207)', 'rgb(202,255,183)', 'rgb(186,228,179)', 'rgb(116,196,118)','rgb(35,139,69)' ];
         this.colors = ['rgb(232,246,243)', 'rgb(162,217,206)', 'rgb(115,198,182)', 'rgb(22,160,133)','rgb(17,122,101)' ];
 
@@ -26,7 +27,7 @@ class CalendarChart{
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + 2.5*this.margin.left + "," + this.margin.top + ")");
+            .attr("transform", "translate(" + 2.5*this.margin.left+20 + "," + this.margin.top + ")");
 
         this.aggregatedData=[];
         let that =this;
@@ -37,7 +38,7 @@ class CalendarChart{
 
     };
 
-    update(selectedTime){
+    update(selectedTime, bikeDateFiltered){
         console.log(selectedTime);
         let that = this;
         let chosenDates=[];
@@ -81,8 +82,7 @@ class CalendarChart{
         console.log(toDate);
 
         // // Remove svg elements on update
-        // d3.selectAll("svg.cal").remove();
-        // d3.selectAll("svg.barchart").remove();
+        this.svg_divCalendar.selectAll("*").remove();
 
 
         //Label for calendar months
@@ -150,6 +150,7 @@ class CalendarChart{
                         console.log(chosenDates);
                     }
                 }
+                that.lineChart.updateHoursLineChart(chosenDates, bikeDateFiltered);
             });
 
         // Date information for each grid ---also text for the tooltip

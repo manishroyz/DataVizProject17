@@ -35,7 +35,7 @@
     <script type="application/javascript" src="js/lineChart.js"></script>
     <script type="application/javascript" src="js/timeChart.js"></script>
     <script type="application/javascript" src="js/selectionChart.js"></script>
-    <!--<script type="application/javascript" src="js/circleChart.js"></script>-->
+    <script type="application/javascript" src="js/circleChart.js"></script>
     <script type="application/javascript" src="js/script.js"></script>
     <script type="application/javascript" src="js/calendarChart.js"></script>
 
@@ -53,13 +53,15 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#mapSection">Map</a>
+              <a class="nav-link js-scroll-trigger lead" href="#bigpictureSection">Big Picture</a>
             </li>
+
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#bigpictureSection">Big Picture</a>
+              <a class="nav-link js-scroll-trigger lead" href="#mapSection">Map</a>
             </li>
+
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#exploreSection">Explore</a>
+              <a class="nav-link js-scroll-trigger lead" href="#exploreSection">Explore</a>
             </li>
           </ul>
         </div>
@@ -72,6 +74,26 @@
         <p class="lead">We analyze commuter bike data for the city of Boston for the year 2016, and allow for exploration of the data.</p>
       </div>
     </header>
+
+
+    <section id="bigpictureSection" class="bg-light">
+      <div class="container">
+        <div class="row>">
+          <div class="col-lg-12 mx-auto">
+            <h2 style="">The Big Picture</h2>
+            <p class="lead">The visualization here shows data around the year: how many bike commutes are made each day in Boston. The way Boston bikers commute closely mirrors an inverse relationship with the weather patterns.
+              As is evident from the graph, the frequency starts ascending as the weather gets warmer with the arrival of Spring. Similarly, it starts descending as the temperature dips with the approaching winter season.
+              We can see periodic dips on most weekends, which gets more pronounced during the warmer months as the reference trips in the adjoining days is large.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 mx-auto">
+            <img src="data/LINE.PNG" alt="Year-round Data">
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <section id="mapSection">
       <div class="container">
@@ -89,21 +111,11 @@
       </div>
     </section>
 
-    <section id="bigpictureSection" class="bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <h2>Services we offer</h2>
-            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut optio velit inventore, expedita quo laboriosam possimus ea consequatur vitae, doloribus consequuntur ex. Nemo assumenda laborum vel, labore ut velit dignissimos.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="exploreSection">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 mx-auto"><h1 style="display: inline;">Explore. &nbsp &nbsp &nbsp</h1><p style="display: inline;" class="lead">Make a selection in the time bar below and click the button to explore bike share use in Boston!<br/><br/></p>
+          <div class="col-lg-12 mx-auto"><h1 style="display: inline;">Explore. &nbsp</h1>
+            <p style="display: inline;" class="lead">Make a brush selection in the time bars below and click the button to explore bike share use in Boston! Please wait for a minute after pressing the button, the data filtering takes time!<br/><br/></p>
           </div>
         </div>
         <div class="row">
@@ -114,12 +126,24 @@
             <a class="btn btn-primary btn-lg" id="updateButton" style="font-size: 0.95rem;" href="#exploreSection">Filter by Time</a>
           </div>
         </div>
-        <br/><br/>
         <div class="row visrow" style="visibility: hidden">
           <div class="col-lg-10 mx-auto" id="divCalendar">
           </div>
           <div class="col-lg-2 mx-auto">
-            <p class="lead"><br/>Select days in the calendar chart to view hour-by-hour line chart visualizations!</p>
+            <h6><br/>Select days in the calendar chart to view hour-by-hour line chart visualizations!</h6>>
+          </div>
+        </div>
+        <div class="row visrow" style="visibility: hidden">
+          <div class="col-lg-4 mx-auto" id="line-chart">
+            <h6><br/>Click on an edge in the circle chart to view line chart for a pair of stations!</h6>
+          </div>
+          <div class="col-lg-4 mx-auto" id="circle-chart-content" >
+            <h6 style="text-align: center">Overview of top stations in the selection</h6>
+            <svg id="circleSvg">
+            </svg>
+          </div>
+          <div class="col-lg-4 mx-auto" id="hours-line-chart">
+            <h6><br/>Select some dates on the calendar to view hour-by-hour information here!</h6>
           </div>
         </div>
       </div>
